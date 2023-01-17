@@ -40,24 +40,25 @@ class UserController extends Controller
 
 public function register(Request $request)
     {
-            $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
-
-        if($validator->fails()){
-                return response()->json($validator->errors()->toJson(), 400);
+        try {
+            DB::beginTransaction();
+                $validator = Validator::make($request->all(), [
+                    'name' => 'required|string|max:255',
+                    'email' => 'required|string|email|max:255|unique:users',
+                    'password' => 'required|string|min:2',
+                ]);
+                if($validator->fails()){
+                    return response()->json($validator->errors()->toJson(), 400);
+                }
+                $data=$request->except(["active"]);
+                $data["password"]=bcrypt($data["password"] ?? "12345");
+                $user = User::create($data);
+                $token = JWTAuth::fromUser($user);
+            DB::commit();
+                return response()->json(compact('user','token'),201);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->HelpError($e);
         }
-
-        $user = User::create([
-            'name' => $request->get('name'),
-            'email' => $request->get('email'),
-            'password' => Hash::make($request->get('password')),
-        ]);
-
-        $token = JWTAuth::fromUser($user);
-
-        return response()->json(compact('user','token'),201);
-    }
+    }//endFunction
 }

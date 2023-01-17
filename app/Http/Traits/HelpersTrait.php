@@ -3,7 +3,6 @@
 namespace App\Http\Traits;
 use Exception;
 use Illuminate\Http\Request;
-use Kutia\Larafirebase\Facades\Larafirebase;
 use Illuminate\Support\Facades\DB;
 trait HelpersTrait {
 
@@ -29,23 +28,6 @@ trait HelpersTrait {
             ]
         ];
     }//end
-    protected function HelpNotification($title,$body,$tokens,$data=[]){
-        if (empty($tokens)) {
-            return true;
-        }
-        if(!is_array($tokens)){
-            $tokens=[$tokens];
-        }
-        return Larafirebase::withTitle($title)
-            ->withBody($body)
-            //->withImage('https://firebase.google.com/images/social.png')
-            //->withIcon('https://seeklogo.com/images/F/firebase-logo-402F407EE0-seeklogo.com.png')
-            ->withSound('default')
-            //->withClickAction('https://www.google.com')
-            ->withPriority('high')
-            ->withAdditionalData($data)
-            ->sendNotification($tokens);
-    }
    protected function HelpIndex($query,$data){
         try {
             DB::beginTransaction();
