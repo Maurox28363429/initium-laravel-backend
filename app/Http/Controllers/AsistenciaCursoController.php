@@ -1,56 +1,49 @@
 <?php
 
 namespace App\Http\Controllers;
-    use Illuminate\Http\Request;
+
+use Illuminate\Http\Request;
     use App\Models\{
-        Payments as Models,
-        Order
+        asistencia_curso as Models
     };
     use App\Http\Traits\HelpersTrait;
-class PaymentsController extends Controller
+class AsistenciaCursoController extends Controller
 {
     use HelpersTrait;
     public function index(Request $request){
-        $query=Models::query()->with(["client","order"]);
+        $query=Models::query();
         return $this->HelpPaginate(
                 $query
             );
     }
     public function show($id,Request $request){
-        $includes=$request->input('includes') ?? ["client","order"];
+        $includes=$request->input('includes') ?? [];
         return $this->HelpShow(
             Models::where("id",$id)->limit(1)->with($includes),
             $request->all()
         );
     }
     public function store(Request $request){
-        $data=$request->all();
-    	   $order=Order::find($data['order_id']);
-    	   if(!$order){
-    	   	return [
-    	   		'status'=>404,
-    	   		'message'=>'Orden no existente'
-    	   	];
-    	   }
-    	   $newPending=$order->pending - $data['total'];
-	   $order->update([
-	   	'pending'=>$newPending
-	   ]);
-	   if($newPending<=0){
-	   	$order->update([
-	   		'pay'=>true
-	   	]);
-	   }
         return $this->HelpStore(
             Models::query(),
-            $data
+            $request->all()
         );
     }
     public function update($id,Request $request){
-        return $this->HelpUpdate(
-            Models::where("id",$id)->limit(1),
+    	  $assist=$request->input('assist') ?? 0;
+    	  $curso=$request->input('curso_id') ?? null;
+    	  $client=$request->input('client_id') ?? null;
+    	  if($assist==0){
+    	  	Models::query()->where('client_id',$client)->where('curso_id',$curso)->delete();
+    	  }else{
+    		$this->HelpStore(
+            Models::query(),
             $request->all()
         );
+  	  }	
+       return response()->json([
+		"message"=>"Realizado exitosamente",
+	  ], 200);
     }
     public function delete($id,Request $request){
         return $this->HelpDelete(

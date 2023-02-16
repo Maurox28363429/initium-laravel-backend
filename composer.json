@@ -14,7 +14,9 @@
         "laravel/socialite": "^5.5",
         "laravel/tinker": "^2.5",
         "maatwebsite/excel": "^3.1",
-        "tymon/jwt-auth": "dev-develop"
+        "tymon/jwt-auth": "dev-develop",
+        "weidner/goutte": "^2.2",
+        "wildbit/postmark-php": "^4.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

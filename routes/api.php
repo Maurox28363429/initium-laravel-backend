@@ -14,8 +14,74 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('register', 'UserController@register');
-Route::post('login', 'UserController@authenticate');
+//auth
+Route::post('register', 'App\Http\Controllers\UserController@register');
+Route::post('login', 'App\Http\Controllers\UserController@authenticate');
+Route::get('auth', 'App\Http\Controllers\UserController@getAuthenticatedUser');
+Route::post('getRecovery', 'App\Http\Controllers\UserController@getRecovery');
+Route::post('putRecovery', 'App\Http\Controllers\UserController@putRecovery');
+//user
+Route::get('users', 'App\Http\Controllers\UserController@index');
+Route::get('user/{id}', 'App\Http\Controllers\UserController@show');
+Route::put('user/{id}', 'App\Http\Controllers\UserController@update');
+Route::delete('user/{id}', 'App\Http\Controllers\UserController@delete');
+//Etapas CRUD
+Route::get('etapas', 'App\Http\Controllers\EtapasController@index');
+Route::get('etapa/{id}', 'App\Http\Controllers\EtapasController@show');
+Route::post('etapas', 'App\Http\Controllers\EtapasController@store');
+Route::put('etapa/{id}', 'App\Http\Controllers\EtapasController@update');
+Route::delete('etapa/{id}', 'App\Http\Controllers\EtapasController@delete');
+//Cursos CRUD
+Route::get('cursos', 'App\Http\Controllers\CursosController@index');
+Route::get('curso/{id}', 'App\Http\Controllers\CursosController@show');
+Route::post('curso', 'App\Http\Controllers\CursosController@store');
+Route::put('curso/{id}', 'App\Http\Controllers\CursosController@update');
+Route::delete('curso/{id}', 'App\Http\Controllers\CursosController@delete');
+//Clientes CRUD
+Route::get('clientes', 'App\Http\Controllers\ClientesController@index');
+Route::get('cliente/{id}', 'App\Http\Controllers\ClientesController@show');
+Route::post('clientes', 'App\Http\Controllers\ClientesController@store');
+Route::post('clientes_public_form', 'App\Http\Controllers\ClientesController@clientes_public_form');
+Route::put('cliente/{id}', 'App\Http\Controllers\ClientesController@update');
+Route::delete('cliente/{id}', 'App\Http\Controllers\ClientesController@delete');
+//Noti CRUD
+Route::get('notis', 'App\Http\Controllers\NotifyController@index');
+Route::get('noti/{id}', 'App\Http\Controllers\NotifyController@show');
+Route::post('notis', 'App\Http\Controllers\NotifyController@store');
+Route::put('noti/{id}', 'App\Http\Controllers\NotifyController@update');
+Route::delete('noti/{id}', 'App\Http\Controllers\NotifyController@delete');
+//Orders CRUD
+Route::get('admin-orders', 'App\Http\Controllers\OrderController@index');
+Route::get('admin-order/{id}', 'App\Http\Controllers\OrderController@show');
+Route::post('admin-orders', 'App\Http\Controllers\OrderController@store');
+Route::put('admin-order/{id}', 'App\Http\Controllers\OrderController@update');
+Route::delete('admin-order/{id}', 'App\Http\Controllers\OrderController@delete');
+//Payment CRUD
+Route::get('payments', 'App\Http\Controllers\PaymentsController@index');
+Route::get('payment/{id}', 'App\Http\Controllers\PaymentsController@show');
+Route::post('payments', 'App\Http\Controllers\PaymentsController@store');
+Route::put('payment/{id}', 'App\Http\Controllers\PaymentsController@update');
+Route::delete('payment/{id}', 'App\Http\Controllers\PaymentsController@delete');
+//Roles
+Route::get('roles', 'App\Http\Controllers\RolesController@index');
+Route::get('role/{id}', 'App\Http\Controllers\RolesController@show');
+Route::post('roles', 'App\Http\Controllers\RolesController@store');
+Route::put('role/{id}', 'App\Http\Controllers\RolesController@update');
+Route::delete('role/{id}', 'App\Http\Controllers\RolesController@delete');
+//Asistencia CRUD
+Route::get('assist', 'App\Http\Controllers\AsistenciaCursoController@index');
+Route::get('assist/{id}', 'App\Http\Controllers\AsistenciaCursoController@show');
+Route::post('assist', 'App\Http\Controllers\AsistenciaCursoController@store');
+Route::put('assist/{id}', 'App\Http\Controllers\AsistenciaCursoController@update');
+Route::delete('assist/{id}', 'App\Http\Controllers\AsistenciaCursoController@delete');
+Route::get('assist_export', 'App\Http\Controllers\ClientesController@export_asistencia');
+
 Route::group(['middleware' => ['jwt.verify']], function() {
        /*AÑADE AQUI LAS RUTAS QUE QUIERAS PROTEGER CON JWT*/
  });
+//wordpress
+Route::get('orders', 'App\Http\Controllers\WordpressController@orders');
+Route::get('products', 'App\Http\Controllers\WordpressController@products');
+Route::get('contratos', 'App\Http\Controllers\WordpressController@contratos');
+
+Route::get('dash', 'App\Http\Controllers\DashboardController@index');

@@ -4,8 +4,19 @@ namespace App\Http\Traits;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-trait HelpersTrait {
+use Postmark\PostmarkClient;
 
+trait HelpersTrait {
+    protected function sendMail($email,$plantilla,$data)
+    {
+        $client = new PostmarkClient("90f1882f-5bbd-42ff-9e0a-fda87bd17a9f");
+        // Send an email:
+        return $sendResult = $client->sendEmailWithTemplate(
+          "reyesm@phoenixtechsa.com",
+          $email,
+          $plantilla,
+          $data);
+    }
     protected function HelpError($error){
         $data=[
             "file"=>$error->getFile(),
