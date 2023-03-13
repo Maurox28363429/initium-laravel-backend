@@ -51,7 +51,7 @@ class ClientesController extends Controller
                    "no_pasaron"=>$con_error,
                    "correctos"=>$correctos
                 ],200);
-            
+
         } catch (\Exception $e) {
             DB::rollback();
             return $this->HelpError($e);
@@ -59,7 +59,7 @@ class ClientesController extends Controller
     }//pase_de_estudiantes
     public function index(Request $request){
     	$includes=$request->input('includes') ?? [];
-        $query=Models::query()->with($includes); 
+        $query=Models::query()->with($includes);
         // foreach ($query->get() as $value) {
         //     Models::find($value->id)->update([
         //         "curso_id"=>Order::where('client_id',$value->id)->first()->curso_id ?? null
@@ -97,18 +97,26 @@ class ClientesController extends Controller
         }
         $query->where('soft_delete',0);
         if($assist && $curso_id){
+            //contar asistencia
     		$query2=Models::query()->orderBy('name','asc');
     		$query2->where('curso_id',$curso_id)->orderBy('name','asc');
-            
-          $query2->with(['assist' => function ($query)use($curso_id){
+            $query2->with(['assist' => function ($query)use($curso_id){
         		$query->where('curso_id',$curso_id);
     		}]);
-    		if($search){
-            $query2->WhereRaw("CONCAT(`name`, ' ', `last_name`) LIKE ?", ['%'.$search.'%']);
-        	}
+
     		$total=$query2->count();
     		$asist=$query2->has('assist', '>', 0)->count();
     		$no_asist=$total-$asist;
+
+            //contar llego
+            $query3=Models::query()->orderBy('name','asc');
+    		$query3->where('curso_id',$curso_id)->orderBy('name','asc');
+            $llegaron_total=$query3->count();
+            $llegaron=$query3->with(['llego' => function ($query)use($curso_id){
+        		$query->where('curso_id',$curso_id);
+    		}],1)->count();
+
+
     		//para limpiar el response
     		$query->select([
     			"id",
@@ -120,7 +128,7 @@ class ClientesController extends Controller
     		])->orderBy('name','asc');
         }
         $datos=$query->paginate(200);
-        
+
         return [
             "data"=>$datos->items(),
             "pagination"=>[
@@ -133,12 +141,17 @@ class ClientesController extends Controller
             	"assit"=>$asist ?? null,
             	"no_assit"=>$no_asist ?? null,
             	"total"=>$total ?? null
+            ],
+            "llegaron"=>[
+            	"total"=>$llegaron,
+            	"total_alumnos"=>$llegaron_total,
+            	"faltan"=>$llegaron_total-$llegaron
             ]
         ];
     }
     public function companeros(Request $request){
         $includes=$request->input('includes') ?? [];
-        $query=Models::query()->with($includes); 
+        $query=Models::query()->with($includes);
         //para limpiar el response
             $query->select([
                 "id",
@@ -161,7 +174,7 @@ class ClientesController extends Controller
     }
     public function lider(Request $request){
         $includes=$request->input('includes') ?? [];
-        $query=Models::query()->with($includes); 
+        $query=Models::query()->with($includes);
         //para limpiar el response
             $query->select([
                 "id",
@@ -171,7 +184,7 @@ class ClientesController extends Controller
                 "phone",
                 "pais"
             ])->orderBy('name','asc');
-        
+
         return $query->limit(1)->first();
     }
     public function show($id,Request $request){
@@ -252,12 +265,12 @@ class ClientesController extends Controller
             Models::where("id",$id)->limit(1),
             ["soft_delete"=>1]
         );
-        
+
         return $response;
     }
       public function export_asistencia(Request $request){
     	   $includes=$request->input('includes') ?? [];
-        $query=Models::query()->with($includes); 
+        $query=Models::query()->with($includes);
         $search=$request->input('search') ?? null;
         $curso_id=$request->input('curso_id') ?? null;
         $curso_status=$request->input('curso_status') ?? null;
@@ -293,6 +306,6 @@ class ClientesController extends Controller
         	"no_asist"=>$no_asist
         ]);
         return $pdf->download('ejemplo.pdf');
-        
+
     }
 }
