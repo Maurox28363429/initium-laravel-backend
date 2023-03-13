@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-    use App\Models\{
-        asistencia_curso as Models
-    };
-    use App\Http\Traits\HelpersTrait;
-class AsistenciaCursoController extends Controller
+use App\Models\{
+    dias_curso_cliente as Models
+};
+use App\Http\Traits\HelpersTrait;
+class DiasCursoClienteController extends Controller
 {
     use HelpersTrait;
     public function index(Request $request){
@@ -28,26 +28,29 @@ class AsistenciaCursoController extends Controller
         );
     }
     public function store(Request $request){
-        return $this->HelpStore(
+      $assist=$request->input('llego') ?? 0;
+      $curso=$request->input('curso_id') ?? null;
+      $client=$request->input('client_id') ?? null;
+      if($assist==0){
+        Models::query()
+        ->where('client_id',$client)
+        ->where('curso_id',$curso)
+        ->whereRaw('day(created_at) = day(now())')
+        ->whereRaw('MONTH(created_at) = MONTH(now())')
+        ->whereRaw('YEAR(created_at) = YEAR(now())')->delete();
+        
+      }else{
+        $this->HelpStore(
             Models::query(),
             $request->all()
         );
+      } 
+       return response()->json([
+        "message"=>"Realizado exitosamente",
+      ], 200);
     }
     public function update($id,Request $request){
-    	  $assist=$request->input('assist') ?? 0;
-    	  $curso=$request->input('curso_id') ?? null;
-    	  $client=$request->input('client_id') ?? null;
-    	  if($assist==0){
-    	  	Models::query()->where('client_id',$client)->where('curso_id',$curso)->delete();
-    	  }else{
-    		$this->HelpStore(
-            Models::query(),
-            $request->all()
-        );
-  	  }	
-       return response()->json([
-		"message"=>"Realizado exitosamente",
-	  ], 200);
+          
     }
     public function delete($id,Request $request){
         return $this->HelpDelete(

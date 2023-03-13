@@ -44,6 +44,7 @@ Route::post('clientes', 'App\Http\Controllers\ClientesController@store');
 Route::post('clientes_public_form', 'App\Http\Controllers\ClientesController@clientes_public_form');
 Route::put('cliente/{id}', 'App\Http\Controllers\ClientesController@update');
 Route::delete('cliente/{id}', 'App\Http\Controllers\ClientesController@delete');
+Route::post('clientes/pase', "App\Http\Controllers\ClientesController@pase_de_estudiantes");
 //Noti CRUD
 Route::get('notis', 'App\Http\Controllers\NotifyController@index');
 Route::get('noti/{id}', 'App\Http\Controllers\NotifyController@show');
@@ -75,6 +76,12 @@ Route::post('assist', 'App\Http\Controllers\AsistenciaCursoController@store');
 Route::put('assist/{id}', 'App\Http\Controllers\AsistenciaCursoController@update');
 Route::delete('assist/{id}', 'App\Http\Controllers\AsistenciaCursoController@delete');
 Route::get('assist_export', 'App\Http\Controllers\ClientesController@export_asistencia');
+//Llego studiante CRUD
+Route::get('llego', 'App\Http\Controllers\DiasCursoClienteController@index');
+Route::get('llego/{id}', 'App\Http\Controllers\DiasCursoClienteController@show');
+Route::post('llego', 'App\Http\Controllers\DiasCursoClienteController@store');
+Route::put('llego/{id}', 'App\Http\Controllers\DiasCursoClienteController@update');
+Route::delete('llego/{id}', 'App\Http\Controllers\DiasCursoClienteController@delete');
 
 Route::group(['middleware' => ['jwt.verify']], function() {
        /*AÑADE AQUI LAS RUTAS QUE QUIERAS PROTEGER CON JWT*/
@@ -85,3 +92,14 @@ Route::get('products', 'App\Http\Controllers\WordpressController@products');
 Route::get('contratos', 'App\Http\Controllers\WordpressController@contratos');
 
 Route::get('dash', 'App\Http\Controllers\DashboardController@index');
+
+// use Maatwebsite\Excel\Facades\Excel;
+// Route::post('importar_estudiantes', function(Request $request){
+//        Excel::load($request->file('excel'), function ($reader) {
+//               return response()->json($reader);
+//        });
+// });
+Route::get('lider', 'App\Http\Controllers\ClientesController@lider');
+Route::get('companeros', 'App\Http\Controllers\ClientesController@companeros');
+
+Route::post('importar_estudiantes','App\Http\Controllers\ClientesController@import_estudiantes');

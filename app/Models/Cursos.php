@@ -22,9 +22,7 @@ class Cursos extends Model
     public function getStudentsAttribute(){
 	  $query=Clientes::query();
 	  $curso_id=$this->attributes['id'];
-	  $query->whereHas('orders', function($q) use ($curso_id){
-                $q->where('curso_id',$curso_id);
-            });
-       return $query->count();
+	  $query->where('curso_id',$curso_id)->orderBy('name','asc');
+      return $query->count();
     }
 }

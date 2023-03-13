@@ -27,7 +27,7 @@ trait HelpersTrait {
         \Log::error($data);
         return $data;
     }//end
-    protected function HelpPaginate($query,$page=15){
+    protected function HelpPaginate($query,$page=10){
         $datos=$query->paginate($page);
         return [
             "data"=>$datos->items(),

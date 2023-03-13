@@ -115,12 +115,18 @@ class UserController extends Controller
         $credentials = $request->only('email', 'password');
         try {
             if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'invalid_credentials'], 400);
+                return response()->json(['error' => 'Credenciales invalidas'], 400);
             }
         } catch (JWTException $e) {
-            return response()->json(['error' => 'could_not_create_token'], 500);
+            return response()->json(['error' => 'No se pudo iniciar'], 500);
         }
         $user=User::where('email',$request->input('email'))->limit(2)->first();
+        if($user->active==0){
+            return response()->json([
+               'user'=>$user,
+               'error'=>"El usuario no esta autorizado"
+            ],500);
+        }
         return response()->json(compact('token','user'));
     }
     public function getAuthenticatedUser()
@@ -150,7 +156,7 @@ class UserController extends Controller
                 if($validator->fails()){
                     return response()->json($validator->errors()->toJson(), 400);
                 }
-                $data=$request->except(["active"]);
+                $data=$request->all();
                 $data["password"]=bcrypt($data["password"] ?? "12345");
                 $user = User::create($data);
                 $token = JWTAuth::fromUser($user);

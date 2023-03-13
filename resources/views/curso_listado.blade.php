@@ -36,6 +36,7 @@
       <th scope="col">ID</th>
       <th scope="col">Nombre</th>
       <th scope="col">Telefono</th>
+      <th scope="col">Enrolador</th>
       <th scope="col">Asistencia</th>
     </tr>
   </thead>
@@ -45,6 +46,7 @@
   	      <th>{{ $value->id }}</th>
 	      <th>{{ $value->name.' '.$value->last_name }}</th>
 	      <th>{{ $value->phone }}</th>
+          <th>{{ ($value->reference_person)? $value->reference_person:'N/D' }}</th>
 	      @if(!empty($value->assist))
 	      	<th>Asistió correctamente</th>
 	      @else

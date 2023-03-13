@@ -30,7 +30,10 @@ class Clientes extends Model
         "note_1",
         "note_2",
         "sexo",
-        "soft_delete"
+        "soft_delete",
+        "reference_person",
+        "user_id",
+        "curso_id"
     ];
     protected $appends = [
         'pagado_pendiente'
@@ -51,9 +54,21 @@ class Clientes extends Model
         ];
     }
 
+    public function curso()
+    {
+        return $this->belongsTo(Cursos::class, 'curso_id');
+    }
     public function assist()
     {
         return $this->belongsTo(asistencia_curso::class,'id','client_id');
+    }
+    public function llego()
+    {
+        return $this->belongsTo(dias_curso_cliente::class,'id','client_id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
     public function getCreatedAtAttribute(){
         $date=explode(" ", $this->attributes['created_at']);

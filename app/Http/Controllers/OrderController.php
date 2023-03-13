@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
     use Illuminate\Http\Request;
     use App\Models\{
-        Order as Models
+        Order as Models,
+        Clientes
     };
     use App\Http\Traits\HelpersTrait;
 class OrderController extends Controller
@@ -37,10 +38,19 @@ class OrderController extends Controller
     public function store(Request $request){
     	   $data=$request->all();
     	   $data['pending']=$data['price'];
-        return $this->HelpStore(
-            Models::query(),
-            $data
-        );
+            return $this->HelpStore(
+                Models::query(),
+                $data
+            );
+            //para masivo
+        // $clientes=Clientes::query()->where('id','>=',$data['client_id'])->get();
+        //    foreach ($clientes as $key => $value) {
+        //     $data['client_id']=$value->id;
+        //         $this->HelpStore(
+        //             Models::query(),
+        //             $data
+        //         );
+        //    }
     }
     public function update($id,Request $request){
         return $this->HelpUpdate(
