@@ -36,8 +36,14 @@ class ClientesController extends Controller
                 foreach ($clientes as $value) {
                     if($value["pase"]==1){
                         $client=Models::find($value["client_id"]);
+                        if($new_curso==$client->curso_id || $new_curso=="001"){
+                           return response()->json([
+                   		   "message"=>"Curso invalido",
+                   		   "status"=>404
+                           ], 200);	
+                        }
                         if($client){
-                            $client->update(['curso_id'=>$new_curso]);
+                           $client->update(['curso_id'=>$new_curso]);
                             $correctos++;
                         }
                     }else{
@@ -95,7 +101,15 @@ class ClientesController extends Controller
                 ->whereRaw('YEAR(created_at) = YEAR(now())');
             }]);
         }
-        $query->where('soft_delete',0);
+        $no_asist=$request->input('no_asist') ?? null;
+        if($no_asist){
+            //para eliminar los no asistidos
+		  $assist_true=$request->input('assist_true'); 
+	          $query->whereHas('assist',function($q){
+		
+		  },1);
+        }
+        $query->where('soft_delete',0);//eliminar los borrados
         if($assist && $curso_id){
             //contar asistencia
     		$query2=Models::query()->orderBy('name','asc');
@@ -112,7 +126,7 @@ class ClientesController extends Controller
             $query3=Models::query()->orderBy('name','asc');
     		$query3->where('curso_id',$curso_id)->orderBy('name','asc');
             $llegaron_total=$query3->count();
-            $llegaron=$query3->with(['llego' => function ($query)use($curso_id){
+          $llegaron=$query3->with(['llego' => function ($query)use($curso_id){
         		$query->where('curso_id',$curso_id);
     		}],1)->count();
 
@@ -142,11 +156,7 @@ class ClientesController extends Controller
             	"no_assit"=>$no_asist ?? null,
             	"total"=>$total ?? null
             ],
-            "llegaron"=>[
-            	"total"=>$llegaron,
-            	"total_alumnos"=>$llegaron_total,
-            	"faltan"=>$llegaron_total-$llegaron
-            ]
+            
         ];
     }
     public function companeros(Request $request){
@@ -278,9 +288,7 @@ class ClientesController extends Controller
             $query->WhereRaw("CONCAT(`name`, ' ', `last_name`) LIKE ?", ['%'.$search.'%']);
         }
         if($curso_id){
-        	 $query->whereHas('orders', function($q) use ($curso_id){
-                $q->where('curso_id',$curso_id);
-            });
+        	 $query->where('curso_id',$curso_id);
         }else{
           $response=[
             "file"=>"ClientController exportar_asistencia",

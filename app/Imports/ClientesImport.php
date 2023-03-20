@@ -19,11 +19,11 @@ class ClientesImport implements ToModel
         if($cliente){
 
         }else{
-            return new Clientes([
-            'name'=>$row[0],
+            $cliente=new Clientes([
+            'name'=>$row[0].' -' ?? null,
             'last_name'=>'',
-            'phone'=>$row[2] ?? 0,
-            'email'=>$row[3],
+            'phone'=>$row[2].' -' ?? 0,
+            'email'=>$row[3].'-' ?? null,
             'birth_date'=>null,
             'nacionalidad'=>'',
             'civil_status'=>'',
@@ -33,11 +33,13 @@ class ClientesImport implements ToModel
             "occupation"=>'',
             "objectives"=>'',
             "dni"=>'',
-            "nickname"=>$row[1] ?? 0,
+            "nickname"=>$row[1].' -' ?? 0,
             "place_work"=>'',
             "referrals_code"=>'',
-            "reference_person"=>$row[4] ?? 0
+            "reference_person"=>$row[4].' -' ?? 0,
+            "curso_id"=>10
         ]);
+        return $cliente;
         }//end ELSE
     }
 }

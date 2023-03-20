@@ -15,6 +15,13 @@ class CursosController extends Controller
         if($search){
             $query->where("name","like","%".$search."%");
         }
+        $active=$request->input('active') ?? null;
+        if($active){
+        	$query
+        	  ->whereRaw('day(init_date) > day(now())')
+            ->whereRaw('MONTH(init_date) = MONTH(now())')
+            ->whereRaw('YEAR(init_date) = YEAR(now())');
+        }
         return $this->HelpPaginate(
                 $query
             );
