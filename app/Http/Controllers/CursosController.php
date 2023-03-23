@@ -18,9 +18,14 @@ class CursosController extends Controller
         $active=$request->input('active') ?? null;
         if($active){
         	$query
-        	  ->whereRaw('day(init_date) > day(now())')
-            ->whereRaw('MONTH(init_date) = MONTH(now())')
-            ->whereRaw('YEAR(init_date) = YEAR(now())');
+		  ->whereRaw('YEAR(end_date) = YEAR(now())')//init year
+		  ->whereRaw('YEAR(init_date) = YEAR(now())')//end uear
+                  //->whereRaw('day(end_date) >= day(now())')//dia
+		  //->whereRaw('day(init_date) <= day(now())')//dia
+		  ->whereRaw('MONTH(init_date) <= MONTH(now())')//mes
+                  ->whereRaw('MONTH(end_date) >= MONTH(now())');//mes
+		 ;
+
         }
         return $this->HelpPaginate(
                 $query

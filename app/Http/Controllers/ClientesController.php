@@ -6,7 +6,9 @@ namespace App\Http\Controllers;
         Clientes as Models,
         Cursos,
         User,
-        Order
+        Order,
+	dias_curso_cliente,
+	historial_curso_client
     };
     use App\Http\Traits\HelpersTrait;
     use App\Imports\ClientesImport;
@@ -66,33 +68,31 @@ class ClientesController extends Controller
     public function index(Request $request){
     	$includes=$request->input('includes') ?? [];
         $query=Models::query()->with($includes);
-        // foreach ($query->get() as $value) {
-        //     Models::find($value->id)->update([
-        //         "curso_id"=>Order::where('client_id',$value->id)->first()->curso_id ?? null
-        //     ]);
-        // }
+
         $search=$request->input('search') ?? null;
         $curso_id=$request->input('curso_id') ?? null;
         $curso_status=$request->input('curso_status') ?? null;
         if($search){
             $query->WhereRaw("CONCAT(`name`, ' ', `last_name`) LIKE ?", ['%'.$search.'%']);
         }
-        if($curso_id){
-        	// $query->whereHas('orders', function($q) use ($curso_id){
-            //     $q->where('curso_id',$curso_id);
-            // })->orderBy('name','asc');
+
+	$order_by_fecha=$request->input('fecha') ?? null;
+	if($order_by_fecha){
+	 $query->orderBy('created_at','desc');
+	}
+        $assist=$request->input('assist') ?? null;
+        if($curso_id && $assist!=1){
             $query->where('curso_id',$curso_id)->orderBy('name','asc');
         }
-        if($curso_status){
-        	 $query->whereHas('orders.curso', function($q) use ($curso_status){
-                $q->where('status',$curso_status);
-            });
-        }
-        $assist=$request->input('assist') ?? null;
         if($assist && $curso_id){
-        	$query->with(['assist' => function ($query)use($curso_id){
-        		$query->where('curso_id',$curso_id);
-    		}]);
+	     $query->where('curso_id',$curso_id)->orWhereHas('orders', function($q) use ($curso_id){
+                 $q->where('curso_id',$curso_id);
+             });
+
+            $query->with(['assist' => function ($query)use($curso_id){
+       		$query->where('curso_id',$curso_id);
+    	    }]);
+
             $query->with(['llego' => function ($query)use($curso_id){
                 $query
                 ->where('curso_id',$curso_id)
@@ -100,49 +100,57 @@ class ClientesController extends Controller
                 ->whereRaw('MONTH(created_at) = MONTH(now())')
                 ->whereRaw('YEAR(created_at) = YEAR(now())');
             }]);
+
+	   $llegaron=dias_curso_cliente::query()
+		->where('curso_id',$curso_id)
+                ->whereRaw('day(created_at) = day(now())')
+                ->whereRaw('MONTH(created_at) = MONTH(now())')
+                ->whereRaw('YEAR(created_at) = YEAR(now())')->count();
         }
         $no_asist=$request->input('no_asist') ?? null;
         if($no_asist){
             //para eliminar los no asistidos
-		  $assist_true=$request->input('assist_true'); 
-	          $query->whereHas('assist',function($q){
-		
-		  },1);
+	    $assist_true=$request->input('assist_true');
+	      $query->whereHas('assist',function($q){
+ 	    },1);
         }
         $query->where('soft_delete',0);//eliminar los borrados
         if($assist && $curso_id){
             //contar asistencia
-    		$query2=Models::query()->orderBy('name','asc');
-    		$query2->where('curso_id',$curso_id)->orderBy('name','asc');
-            $query2->with(['assist' => function ($query)use($curso_id){
-        		$query->where('curso_id',$curso_id);
-    		}]);
-
-    		$total=$query2->count();
-    		$asist=$query2->has('assist', '>', 0)->count();
-    		$no_asist=$total-$asist;
+    	    $query2=Models::query();
+    	    $query2->where('curso_id',$curso_id)->orderBy('name','asc');
+            $query2->with(['assist' => function ($q2)use($curso_id){
+              $q2->where('curso_id',$curso_id);
+    	    }]);
+    	    $total=$query2->count();
+	    
+	    $query4=Models::query();
+            $query4->where('curso_id',$curso_id)->orderBy('name','asc');
+            $query4->with(['assist' => function ($q2)use($curso_id){
+              $q2->where('curso_id',$curso_id);
+            }]);
+            $query4->whereHas('assist',function($q){},2);
+            $asist=$query4->count();
+    	    $no_asist=$total-$asist;
 
             //contar llego
             $query3=Models::query()->orderBy('name','asc');
-    		$query3->where('curso_id',$curso_id)->orderBy('name','asc');
-            $llegaron_total=$query3->count();
-          $llegaron=$query3->with(['llego' => function ($query)use($curso_id){
-        		$query->where('curso_id',$curso_id);
-    		}],1)->count();
+    	    $query3->where('curso_id',$curso_id)->orderBy('name','asc');
 
 
-    		//para limpiar el response
-    		$query->select([
-    			"id",
-    			"name",
-    			"last_name",
-    			"email",
-    			"phone",
-    			"pais"
-    		])->orderBy('name','asc');
+    	    //para limpiar el response
+    	    $query->select([
+    	       "id",
+               "name",
+               "last_name",
+               "email",
+    	       "phone",
+    	       "pais",
+	       "curso_id"
+    	    ])->orderBy('name','asc');
         }
-        $datos=$query->paginate(200);
-
+        $datos=$query->paginate(50);
+       
         return [
             "data"=>$datos->items(),
             "pagination"=>[
@@ -154,9 +162,10 @@ class ClientesController extends Controller
             "aditional"=>[
             	"assit"=>$asist ?? null,
             	"no_assit"=>$no_asist ?? null,
-            	"total"=>$total ?? null
+            	"total"=>$total ?? null,
+		"llegaron"=>($assist && $curso_id)? $llegaron:null,
+		"no_llegaron"=>($assist && $curso_id)? $total-$llegaron:null,
             ],
-            
         ];
     }
     public function companeros(Request $request){
@@ -211,10 +220,11 @@ class ClientesController extends Controller
             $data= $request->except(['referrals_code']);
             //obtener el ultimo curso SIC
             $sic='SIC';
-            $last_curso=Cursos::query()
-                ->orderBy('id','desc')
-                ->where('name',"LIKE","%".$sic."%")
-                ->first();
+            //$last_curso=Cursos::query()
+//                ->orderBy('id','desc')
+ //               ->where('name',"LIKE","%".$sic."%")
+   //             ->first();
+	    //$data['curso_id']=$last_curso->id;
              //parsear o setear password
             $data["password"]=bcrypt($data["password"] ?? "12345");
             $name=$data['name'] ?? '';
@@ -226,7 +236,7 @@ class ClientesController extends Controller
                 "role_id"=>7,
                 "password"=>$data['password'],
                 "active"=>0,
-                "curso_actual_id"=>$last_curso->id,
+               // "curso_actual_id"=>$last_curso->id,
             ];
             $user=User::create($user_data);
             if(!$user){
@@ -279,7 +289,7 @@ class ClientesController extends Controller
         return $response;
     }
       public function export_asistencia(Request $request){
-    	   $includes=$request->input('includes') ?? [];
+    	$includes=$request->input('includes') ?? [];
         $query=Models::query()->with($includes);
         $search=$request->input('search') ?? null;
         $curso_id=$request->input('curso_id') ?? null;
@@ -288,7 +298,10 @@ class ClientesController extends Controller
             $query->WhereRaw("CONCAT(`name`, ' ', `last_name`) LIKE ?", ['%'.$search.'%']);
         }
         if($curso_id){
-        	 $query->where('curso_id',$curso_id);
+             $query->where('curso_id',$curso_id)->orWhereHas('orders', function($q) use ($curso_id){
+                 $q->where('curso_id',$curso_id);
+             });
+
         }else{
           $response=[
             "file"=>"ClientController exportar_asistencia",
@@ -302,9 +315,23 @@ class ClientesController extends Controller
         	$query->where('curso_id',$curso_id);
     	   }]);
     	   $datos=$query->get();
-    	   $total=$query->count();
     	   $asist=$query->has('assist', '>', 0)->count();
-    	   $no_asist=$total-$asist;
+	
+	    $query2=Models::query();
+            $query2->where('curso_id',$curso_id)->orderBy('name','asc');
+            $query2->with(['assist' => function ($q2)use($curso_id){
+              $q2->where('curso_id',$curso_id);
+            }]);
+            $total=$query2->count();
+            
+            $query4=Models::query();
+            $query4->where('curso_id',$curso_id)->orderBy('name','asc');
+            $query4->with(['assist' => function ($q2)use($curso_id){
+              $q2->where('curso_id',$curso_id);
+            }]);
+            $query4->whereHas('assist',function($q){},2);
+            $asist=$query4->count();                
+            $no_asist=$total-$asist;
     	   //return $query->get();
         $pdf = \PDF::loadView('curso_listado',[
         	"data"=>$datos,
