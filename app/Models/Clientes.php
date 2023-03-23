@@ -66,6 +66,10 @@ class Clientes extends Model
     {
         return $this->belongsTo(dias_curso_cliente::class,'id','client_id');
     }
+    public function historial()
+    {
+        return $this->belongsTo(historial_curso_client::class,'id','client_id');
+    }
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

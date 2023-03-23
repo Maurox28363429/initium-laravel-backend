@@ -12,6 +12,8 @@ class OrderController extends Controller
     use HelpersTrait;
     public function index(Request $request){
         $query=Models::query()->with(["client","curso"]);
+	//orderby Desc
+	$query->orderBy('id','desc');
         $curso=$request->input('curso') ?? null;
         $client=$request->input('client') ?? null;
         if($curso){
@@ -25,7 +27,7 @@ class OrderController extends Controller
             });
         }
         return $this->HelpPaginate(
-                $query
+                $query,50
             );
     }
     public function show($id,Request $request){
@@ -38,6 +40,16 @@ class OrderController extends Controller
     public function store(Request $request){
     	   $data=$request->all();
     	   $data['pending']=$data['price'];
+	   $client=Clientes::find($request->input('client_id') ?? null);
+	   if(!$client){
+		return response()->json([
+		   "error"=>"Cliente no valido"
+		],404);
+	   }else{
+		if($client->curso_id==null){
+		  $client->update(['curso_id'=>$request->input('curso_id')]);
+		}
+	  }
             return $this->HelpStore(
                 Models::query(),
                 $data
