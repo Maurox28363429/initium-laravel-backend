@@ -38,7 +38,7 @@ class ClientesController extends Controller
                 foreach ($clientes as $value) {
                     if($value["pase"]==1){
                         $client=Models::find($value["client_id"]);
-                        if($new_curso==$client->curso_id || $new_curso=="001"){
+                       if($new_curso=='no_subir'){
                            return response()->json([
                    		   "message"=>"Curso invalido",
                    		   "status"=>404
@@ -149,7 +149,7 @@ class ClientesController extends Controller
 	       "curso_id"
     	    ])->orderBy('name','asc');
         }
-        $datos=$query->paginate(50);
+        $datos=$query->paginate(150);
        
         return [
             "data"=>$datos->items(),

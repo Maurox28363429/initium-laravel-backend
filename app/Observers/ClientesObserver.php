@@ -16,7 +16,7 @@ class ClientesObserver
     {
         historial_curso_client::create([
 	  "client_id"=>$clientes->id,
-	  "curso_id"=>$clientes->curso_id
+	  "curso_id"=>$clientes->curso_id ?? null
 	]);
     }
 
@@ -31,7 +31,7 @@ class ClientesObserver
         if($clientes->isDirty('curso_id')){
 	  historial_curso_client::create([
             "client_id"=>$clientes->id,
-            "curso_id"=>$clientes->curso_id
+            "curso_id"=>$clientes->curso_id ?? null
 	  ]);
 	}
     }

@@ -2,7 +2,11 @@
 
 namespace App\Imports;
 
-use App\Models\Clientes;
+use App\Models\{
+	Clientes,
+	User,
+	Order
+};
 use Maatwebsite\Excel\Concerns\ToModel;
 //use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -15,15 +19,11 @@ class ClientesImport implements ToModel
     */
     public function model(array $row)
     {
-        $cliente=Clientes::query()->where('email',$row[3])->first();  
-        if($cliente){
-
-        }else{
-            $cliente=new Clientes([
-            'name'=>$row[0].' -' ?? null,
+          $cliente=new Clientes([
+            'name'=>$row[0] ?? null,
             'last_name'=>'',
-            'phone'=>$row[2].' -' ?? 0,
-            'email'=>$row[3].'-' ?? null,
+            'phone'=>$row[2] ?? 0,
+            'email'=>$row[3] ?? null,
             'birth_date'=>null,
             'nacionalidad'=>'',
             'civil_status'=>'',
@@ -33,13 +33,20 @@ class ClientesImport implements ToModel
             "occupation"=>'',
             "objectives"=>'',
             "dni"=>'',
-            "nickname"=>$row[1].' -' ?? 0,
+            "nickname"=>$row[1] ?? 0,
             "place_work"=>'',
             "referrals_code"=>'',
-            "reference_person"=>$row[4].' -' ?? 0,
-            "curso_id"=>10
+            "reference_person"=>$row[4] ?? 0,
+	    "curso_id"=>1
+        ]);
+	Order::create([
+          "reason"=>'', 
+          "client_id"=>$cliente->id,
+          "price"=>625,
+          "pay"=>0,
+          "payment_method"=>"1",
+          "curso_id"=>1,
         ]);
         return $cliente;
-        }//end ELSE
     }
 }

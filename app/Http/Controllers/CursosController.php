@@ -28,7 +28,7 @@ class CursosController extends Controller
 
         }
         return $this->HelpPaginate(
-                $query
+                $query,150
             );
     }
     public function show($id,Request $request){
