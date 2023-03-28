@@ -123,13 +123,14 @@ class ClientesController extends Controller
               $q2->where('curso_id',$curso_id);
     	    }]);
     	    $total=$query2->count();
-	    
 	    $query4=Models::query();
             $query4->where('curso_id',$curso_id)->orderBy('name','asc');
             $query4->with(['assist' => function ($q2)use($curso_id){
               $q2->where('curso_id',$curso_id);
             }]);
-            $query4->whereHas('assist',function($q){},2);
+            $query4->whereHas('assist',function($q)use($curso_id){
+		$q->where('curso_id',$curso_id);
+	    });
             $asist=$query4->count();
     	    $no_asist=$total-$asist;
 
@@ -329,8 +330,10 @@ class ClientesController extends Controller
             $query4->with(['assist' => function ($q2)use($curso_id){
               $q2->where('curso_id',$curso_id);
             }]);
-            $query4->whereHas('assist',function($q){},2);
-            $asist=$query4->count();                
+            $query4->whereHas('assist',function($q)use($curso_id){
+		$q->where('curso_id',$curso_id);
+	    });
+            $asist=$query4->count();
             $no_asist=$total-$asist;
     	   //return $query->get();
         $pdf = \PDF::loadView('curso_listado',[
