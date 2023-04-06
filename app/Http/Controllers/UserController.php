@@ -1,7 +1,17 @@
 <?php   
 namespace App\Http\Controllers;
 
-    use App\Models\User;
+    use App\Models\{
+        User,
+        //para borrar por client
+        historial_curso_client,
+        asistencia_curso,
+        Payments,
+        dias_curso_cliente,
+        Order,
+        //para borrar por user_id
+        Clientes,
+    };
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Hash;
     use Illuminate\Support\Facades\Validator;
@@ -34,6 +44,28 @@ class UserController extends Controller
             return $this->HelpError($e);
         }
     }
+    public function validateRecovery(Request $request){
+        try {
+            $email=$request->input('email') ?? null;
+            $code=$request->input('code') ?? null;
+            if(!$email){
+                return ["message"=>"Correo no enviado","status"=>404];
+            }
+            if(!$code){
+                return ["message"=>"Codigo no enviado","status"=>404];
+            }
+            $user=User::where('email',$email)->where('recovery_cod',$code)->first();
+            if(!$user){
+                return ["message"=>"Usuario no encontrado","status"=>404];
+            }
+            return [
+                'message'=>"Usuario y codigo validos",
+                'status'=>200
+            ];
+        } catch (\Exception $e) {
+            return $this->HelpError($e);
+        }
+    }
     public function putRecovery(Request $request){
         try {
             $recovery_cod=$request->input('recovery_cod') ?? null;
@@ -44,7 +76,11 @@ class UserController extends Controller
             if(!$password){
                 throw new Exception("Contraseña no enviado", 404);
             }
-            $user=User::where('recovery_cod',$recovery_cod)->first();
+            $email=$request->input('email') ?? null;
+            if(!$email){
+                throw new Exception("Correo no enviado", 404);
+            }
+            $user=User::where('email',$email)->where('recovery_cod',$recovery_cod)->first();
             if(!$user){
                 throw new Exception("Usuario no encontrado", 404);
             }
@@ -105,10 +141,32 @@ class UserController extends Controller
         );
     }
     public function delete($id,Request $request){
-        return $this->HelpDelete(
-            User::where("id",$id)->limit(1),
-            $request->all()
-        );
+        try {
+
+            DB::beginTransaction();
+               $user=User::find($id);
+               if(!$user){
+                throw new \Exception("Usuario no encontrado", 404);
+               }
+               $client=Clientes::where("user_id",$user->id)->first();
+               if($client){
+                    dias_curso_cliente::where('client_id',$client->id)->delete();
+                    Payments::where("client_id",$client->id)->delete();
+                    historial_curso_client::where("client_id",$client->id)->delete();
+                    asistencia_curso::where("client_id",$client->id)->delete();
+                    Order::where("client_id",$client->id)->delete();
+                    $client->delete();
+               }
+               User::where('id',$id)->limit(1)->delete();
+              
+            DB::commit();
+            return response()->json([
+                "data"=>$user
+            ],200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->HelpError($e);
+        }
     }
     public function authenticate(Request $request)
     {

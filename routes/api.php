@@ -17,8 +17,10 @@ use Illuminate\Support\Facades\Route;
 //auth
 Route::post('register', 'App\Http\Controllers\UserController@register');
 Route::post('login', 'App\Http\Controllers\UserController@authenticate');
+
 Route::get('auth', 'App\Http\Controllers\UserController@getAuthenticatedUser');
 Route::post('getRecovery', 'App\Http\Controllers\UserController@getRecovery');
+Route::post('validateRecovery', 'App\Http\Controllers\UserController@validateRecovery');
 Route::post('putRecovery', 'App\Http\Controllers\UserController@putRecovery');
 //user
 Route::get('users', 'App\Http\Controllers\UserController@index');

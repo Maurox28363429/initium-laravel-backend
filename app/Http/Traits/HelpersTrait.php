@@ -131,4 +131,11 @@ trait HelpersTrait {
             return $this->HelpError($e);
         }
     }//StoreEnd
+    protected function HelpResponse($data){
+        return [
+                "message"=>"data",
+                "status"=>200,
+                "data"=>$data
+            ];
+    }
 }//end

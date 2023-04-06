@@ -22,7 +22,7 @@ class Clientes extends Model
         "occupation",
         "objectives",
         "dni",
-        "nickname",
+        "Nickname",
         "place_work",
         "referrals_code",
         "question_1",
