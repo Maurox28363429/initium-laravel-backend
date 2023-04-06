@@ -256,6 +256,30 @@ class ClientesController extends Controller
                 $model->reference_person=$reference_person;
             }
             $model->save();
+        //enviar correo si es valido 0406f231-9899-47d3-a951-f20006e66c25
+        try {
+            $enviado=$this->sendMail($data['email'],31336310,[
+                "user_name"=>$request->input("name")." ".$request->input("last_name")
+            ]);
+            if($enviado->message!="OK"){
+                throw new \Exception("Error", 404);
+                
+            }
+        } catch (\Exception $e) {
+            return $e;
+            return response()->json([
+               "message"=>"Por favor, colocar un correo real",
+               "error"=>"Por favor, colocar un correo real"
+            ],200);
+        }
+        $this->sendMail("registro@grupoinitium.com",31336361,[
+            "data_email"=>$data["email"],
+            "data_name"=>$data["name"],
+            "data_last_name"=>$data["last_name"],
+            "data_nickname"=>$data["Nickname"],
+            "accept_contract"=>($data["accept_contract"])? "Acepto":"No acepto"
+            "data_phone"=>$data["phone"]
+        ]);
             DB::commit();
             return [
                 "message"=>"Datos creados",
