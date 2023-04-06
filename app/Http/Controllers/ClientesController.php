@@ -277,7 +277,7 @@ class ClientesController extends Controller
             "data_name"=>$data["name"],
             "data_last_name"=>$data["last_name"],
             "data_nickname"=>$data["Nickname"],
-            "accept_contract"=>($data["accept_contract"])? "Acepto":"No acepto"
+            "accept_contract"=>($data["accept_contract"])? "Acepto":"No acepto",
             "data_phone"=>$data["phone"]
         ]);
             DB::commit();
