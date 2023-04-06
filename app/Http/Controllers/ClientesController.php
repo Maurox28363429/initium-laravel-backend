@@ -150,7 +150,7 @@ class ClientesController extends Controller
 	       "curso_id"
     	    ])->orderBy('name','asc');
         }
-        $datos=$query->paginate(50);
+        $datos=$query->paginate(150);
        
         return [
             "data"=>$datos->items(),
