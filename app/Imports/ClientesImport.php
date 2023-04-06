@@ -2,7 +2,10 @@
 
 namespace App\Imports;
 
-use App\Models\Clientes;
+use App\Models\{
+	Clientes,
+	Order
+};
 use Maatwebsite\Excel\Concerns\ToModel;
 //use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -37,8 +40,16 @@ class ClientesImport implements ToModel
             "place_work"=>'',
             "referrals_code"=>'',
             "reference_person"=>$row[4].' -' ?? 0,
-            "curso_id"=>10
+            "curso_id"=>7
         ]);
+	Order::create([
+    	"reason"=>"",
+    	"client_id"=>$cliente->id,
+    	"price"=>625,
+    	"pay"=>0,
+    	"payment_method"=>"yappy",
+    	"curso_id"=>7
+	]);
         return $cliente;
         }//end ELSE
     }

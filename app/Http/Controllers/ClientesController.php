@@ -254,6 +254,7 @@ class ClientesController extends Controller
             if($reference_person){
                 $model->reference_person=$reference_person;
             }
+	    
             $model->save();
             DB::commit();
             return [
