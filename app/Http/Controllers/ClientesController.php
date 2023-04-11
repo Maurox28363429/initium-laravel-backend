@@ -156,19 +156,8 @@ class ClientesController extends Controller
     	    $query3->where('curso_id',$curso_id)->orderBy('name','asc');
 
 
-    	    //para limpiar el response
-    	    $query->select([
-    	       "id",
-               "name",
-               "last_name",
-               "email",
-    	       "phone",
-    	       "pais",
-	           "curso_id",
-               "Nickname",
-               "place_work",
-               "referrals_code",
-    	    ])->orderBy('name','asc');
+    	    //ordenar
+    	    $query->orderBy('name','asc');
         }
         $datos=$query->paginate(150);
        

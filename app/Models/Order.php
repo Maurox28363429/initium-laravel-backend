@@ -16,7 +16,8 @@ class Order extends Model
         "payment_method",
         "curso_id",
         "pending",
-	"img_url"
+	    "img_url",
+        "gol"
     ];
     public function client()
     {
