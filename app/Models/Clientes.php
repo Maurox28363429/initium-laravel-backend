@@ -41,6 +41,10 @@ class Clientes extends Model
     public function orders(){
     	   return $this->hasMany(Order::class,'client_id');
     }
+    public function getAcceptContractAttribute($value)
+    {
+        return true;
+    }
     public function getPagadoPendienteAttribute(){
     	   $pagado=0;
     	   $pendiente=0;

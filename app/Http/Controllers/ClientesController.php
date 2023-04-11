@@ -16,9 +16,26 @@ namespace App\Http\Controllers;
     use Illuminate\Support\Facades\DB;
     use JWTAuth;
     use Tymon\JWTAuth\Exceptions\JWTException;
+    use App\Exports\{
+        ClientesExport,
+        AsistenciaExport,
+        PromocionesExport
+    };
 class ClientesController extends Controller
 {
     use HelpersTrait;
+    public function clientes_excel_export(Request $request){
+        $paremetro=$request->all();
+        return Excel::download(new ClientesExport($paremetro), 'clientes.xlsx');
+    }//export
+    public function asistencia_excel_export(Request $request){
+        $paremetro=$request->all();
+        return Excel::download(new AsistenciaExport($paremetro), 'asistencia.xlsx');
+    }//export
+    public function promocion_excel_export(Request $request){
+        $paremetro=$request->all();
+        return Excel::download(new PromocionesExport($paremetro), 'promociones.xlsx');
+    }//export
     public function import_estudiantes(Request $request)
     {
         $file=$request->file('excel');
@@ -147,7 +164,10 @@ class ClientesController extends Controller
                "email",
     	       "phone",
     	       "pais",
-	       "curso_id"
+	           "curso_id",
+               "Nickname",
+               "place_work",
+               "referrals_code",
     	    ])->orderBy('name','asc');
         }
         $datos=$query->paginate(150);

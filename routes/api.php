@@ -47,6 +47,11 @@ Route::post('clientes_public_form', 'App\Http\Controllers\ClientesController@cli
 Route::put('cliente/{id}', 'App\Http\Controllers\ClientesController@update');
 Route::delete('cliente/{id}', 'App\Http\Controllers\ClientesController@delete');
 Route::post('clientes/pase', "App\Http\Controllers\ClientesController@pase_de_estudiantes");
+
+Route::get('clientes_excel_export', "App\Http\Controllers\ClientesController@clientes_excel_export");
+Route::get('asistencia_excel_export', "App\Http\Controllers\ClientesController@asistencia_excel_export");
+Route::get('promocion_excel_export', "App\Http\Controllers\ClientesController@promocion_excel_export");
+
 //Noti CRUD
 Route::get('notis', 'App\Http\Controllers\NotifyController@index');
 Route::get('noti/{id}', 'App\Http\Controllers\NotifyController@show');
