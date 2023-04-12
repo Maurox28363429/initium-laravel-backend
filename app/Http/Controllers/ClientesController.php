@@ -316,12 +316,17 @@ class ClientesController extends Controller
         );
     }
     public function delete($id,Request $request){
-        $response=$this->HelpUpdate(
-            Models::where("id",$id)->limit(1),
-            ["soft_delete"=>1]
-        );
-
-        return $response;
+        $client=Models::find($id);
+        if(!$client){
+            throw new \Exception("No encontrado", 404);
+        }
+        dias_curso_cliente::where('client_id',$client->id)->delete();
+        Payments::where("client_id",$client->id)->delete();
+        historial_curso_client::where("client_id",$client->id)->delete();
+        asistencia_curso::where("client_id",$client->id)->delete();
+        Order::where("client_id",$client->id)->delete();
+        $client->delete();
+        return $client ?? $response;
     }
       public function export_asistencia(Request $request){
     	$includes=$request->input('includes') ?? [];
