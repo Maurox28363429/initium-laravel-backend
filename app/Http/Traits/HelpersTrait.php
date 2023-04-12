@@ -12,7 +12,7 @@ trait HelpersTrait {
         $client = new PostmarkClient("90f1882f-5bbd-42ff-9e0a-fda87bd17a9f");
         // Send an email:
         return $sendResult = $client->sendEmailWithTemplate(
-          "reyesm@phoenixtechsa.com",
+          "registro@grupoinitium.com ",
           $email,
           $plantilla,
           $data);
