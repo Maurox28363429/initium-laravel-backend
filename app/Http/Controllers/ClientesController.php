@@ -21,6 +21,7 @@ namespace App\Http\Controllers;
         AsistenciaExport,
         PromocionesExport
     };
+
 class ClientesController extends Controller
 {
     use HelpersTrait;
@@ -272,14 +273,13 @@ class ClientesController extends Controller
             ]);
             if($enviado->message!="OK"){
                 throw new \Exception("Error", 404);
-                
             }
         } catch (\Exception $e) {
-            return $e;
+            
             return response()->json([
                "message"=>"Por favor, colocar un correo real",
                "error"=>"Por favor, colocar un correo real"
-            ],200);
+            ],500);
         }
         $this->sendMail("registro@grupoinitium.com",31336361,[
             "data_email"=>$data["email"],
