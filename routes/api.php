@@ -16,7 +16,11 @@ use Illuminate\Support\Facades\Route;
 
 //auth
 Route::post('register', 'App\Http\Controllers\UserController@register');
+
+Route::post('inscribir','App\Http\Controllers\UserController@inscribir');
+
 Route::post('login', 'App\Http\Controllers\UserController@authenticate');
+
 
 Route::get('auth', 'App\Http\Controllers\UserController@getAuthenticatedUser');
 Route::post('getRecovery', 'App\Http\Controllers\UserController@getRecovery');

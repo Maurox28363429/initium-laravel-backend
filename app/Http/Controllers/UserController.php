@@ -9,8 +9,9 @@ namespace App\Http\Controllers;
         Payments,
         dias_curso_cliente,
         Order,
+        Cursos,
         //para borrar por user_id
-        Clientes,
+        Clientes
     };
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Hash;
@@ -226,5 +227,34 @@ class UserController extends Controller
         }
 
     }//Registro
+    public function inscribir(Request $request){
+        return 10;
+        try{
+            DB::beginTransaction();
+                
+                $validator = Validator::make($request->all(), [
+                    'name' => 'required|string|max:255',
+                    'email' => 'required|string|email|max:255|unique:users',
+                    'password' => 'required|string|min:2',
+                ]);
+                if($validator->fails()){
+                    return response()->json($validator->errors()->toJson(), 400);
+                }
+                $data=$request->all() ?? [];
+                $sic='SIC';
+                $last_curso=Cursos::query()
+                    ->orderBy('id','desc')
+                    ->where('name',"LIKE","%".$sic."%")
+                ->first();
+                $data["curso_actual_id"]=$last_curso->id;
+                $user = User::create($data);
+                $token = JWTAuth::fromUser($user);
+            DB::commit();
+                return response()->json(compact('user','token'),201);
+        }catch(\Exception $e){
+            DB::rollback();
+            return $this->HelpError($e);
+        }
+    }//end Function
 
 }//End Class
