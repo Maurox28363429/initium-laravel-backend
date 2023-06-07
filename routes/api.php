@@ -21,6 +21,7 @@ Route::post('register', 'App\Http\Controllers\UserController@register');
 Route::post('inscribir','App\Http\Controllers\UserController@inscribir');
 
 Route::post('login', 'App\Http\Controllers\UserController@authenticate');
+
 Route::post('login_participante', 'App\Http\Controllers\UserController@authenticate_participante');
 
 Route::get('auth', 'App\Http\Controllers\UserController@getAuthenticatedUser');
@@ -54,6 +55,7 @@ Route::put('cliente/{id}', 'App\Http\Controllers\ClientesController@update');
 Route::delete('cliente/{id}', 'App\Http\Controllers\ClientesController@delete');
 Route::post('clientes/pase', "App\Http\Controllers\ClientesController@pase_de_estudiantes");
 Route::post('clientes_form', "App\Http\Controllers\ClientesController@register");
+Route::post('import_gol', 'App\Http\Controllers\ClientesController@import_gol');
 
 Route::get('clientes_excel_export', "App\Http\Controllers\ClientesController@clientes_excel_export");
 Route::get('asistencia_excel_export', "App\Http\Controllers\ClientesController@asistencia_excel_export");

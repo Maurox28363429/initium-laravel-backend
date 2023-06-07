@@ -25,7 +25,8 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'active',
         "curso_actual_id",
-        'form_resolve'
+        'form_resolve',
+        'gol'
     ];
 
     /**

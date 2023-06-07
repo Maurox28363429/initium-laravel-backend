@@ -22,9 +22,17 @@ namespace App\Http\Controllers;
     use App\Http\Traits\HelpersTrait;
     use Exception;
 
+    use App\Imports\GolInUserImport;
+    use Maatwebsite\Excel\Facades\Excel;
+
 class UserController extends Controller
 {
     use HelpersTrait;
+    public function import_gol(Request $request){
+        $file=$request->file('excel');
+        Excel::import(new GolInUserImport, $file);
+        return ['message'=>'existoso'];
+    }//end
     public function getRecovery(Request $request){
         try {
             $email=$request->input('email') ?? null;

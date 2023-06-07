@@ -14,7 +14,10 @@ namespace App\Http\Controllers;
 
     };
     use App\Http\Traits\HelpersTrait;
-    use App\Imports\ClientesImport;
+    use App\Imports\{
+        ClientesImport,
+        GolInClientesImport
+    };
     use Maatwebsite\Excel\Facades\Excel;
     use Illuminate\Support\Facades\DB;
     use JWTAuth;
@@ -24,7 +27,7 @@ namespace App\Http\Controllers;
         AsistenciaExport,
         PromocionesExport
     };
-    use Barryvdh\DomPDF\PDF;
+   use PDF;
 
 class ClientesController extends Controller
 {
@@ -45,6 +48,12 @@ class ClientesController extends Controller
     {
         $file=$request->file('excel');
         Excel::import(new ClientesImport, $file);
+        return ['message'=>'existoso'];
+    }
+    public function import_gol(Request $request)
+    {
+        $file=$request->file('excel');
+        Excel::import(new GolInClientesImport, $file);
         return ['message'=>'existoso'];
     }
     public function pase_de_estudiantes(Request $request){
