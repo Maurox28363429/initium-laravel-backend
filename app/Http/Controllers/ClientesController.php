@@ -10,8 +10,7 @@ namespace App\Http\Controllers;
 	    dias_curso_cliente,
 	    historial_curso_client,
         Payments,
-        asistencia_curso,
-
+        asistencia_curso
     };
     use App\Http\Traits\HelpersTrait;
     use App\Imports\ClientesImport;
@@ -112,7 +111,7 @@ class ClientesController extends Controller
              });
 
             $query->with(['assist' => function ($query)use($curso_id){
-       		$query->where('curso_id',$curso_id);
+       		    $query->where('curso_id',$curso_id);
     	    }]);
 
             $query->with(['llego' => function ($query)use($curso_id){
