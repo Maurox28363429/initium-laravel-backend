@@ -20,6 +20,7 @@ namespace App\Http\Controllers;
     use Tymon\JWTAuth\Exceptions\JWTException;
     use Illuminate\Support\Facades\DB;
     use App\Http\Traits\HelpersTrait;
+    use Illuminate\Support\Facades\Http;
     use Exception;
 
     use App\Imports\GolInUserImport;
@@ -131,6 +132,11 @@ class UserController extends Controller
                 $user=User::find($id);
                 if(!$user){
                     return response()->json(['error'=>'usuario no encontrado'], 400);
+                }
+                if($user->active==0 && $data['active']==1){
+                    $realtime = Http::post('https://pocketbase.real.phoenixtechsa.com/api/collections/activacion_de_usuario_initium/records', [
+                        'user_id' => $user->id
+                    ]);
                 }
                 if( isset($data['password']) ){
                     $data["password"]=bcrypt($data["password"]);

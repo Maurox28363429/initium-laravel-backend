@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Order;
+use App\Models\{Order,pases};
 class Clientes extends Model
 {
     use HasFactory;
@@ -36,7 +36,8 @@ class Clientes extends Model
         "curso_id"
     ];
     protected $appends = [
-        'pagado_pendiente'
+        'pagado_pendiente',
+        'pase'
     ];
     public function orders(){
     	   return $this->hasMany(Order::class,'client_id');
@@ -65,6 +66,10 @@ class Clientes extends Model
     public function assist()
     {
         return $this->belongsTo(asistencia_curso::class,'id','client_id');
+    }
+    public function getPaseAttribute()
+    {
+        return pases::where('client_id',$this->attributes['id'])->where('curso_id',$this->attributes['curso_id'])->count();  
     }
     public function llego()
     {

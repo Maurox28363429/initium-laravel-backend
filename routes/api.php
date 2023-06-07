@@ -79,6 +79,12 @@ Route::get('admin-order/{id}', 'App\Http\Controllers\OrderController@show');
 Route::post('admin-orders', 'App\Http\Controllers\OrderController@store');
 Route::put('admin-order/{id}', 'App\Http\Controllers\OrderController@update');
 Route::delete('admin-order/{id}', 'App\Http\Controllers\OrderController@delete');
+//Pases CRUD
+Route::get('pases_list', 'App\Http\Controllers\PasesController@index');
+Route::get('pases_list/{id}', 'App\Http\Controllers\PasesController@show');
+Route::post('pases_list', 'App\Http\Controllers\PasesController@store');
+Route::put('pases_list/{id}', 'App\Http\Controllers\PasesController@update');
+Route::delete('pases_list/{id}', 'App\Http\Controllers\PasesController@delete');
 //Payment CRUD
 Route::get('payments', 'App\Http\Controllers\PaymentsController@index');
 Route::get('payment/{id}', 'App\Http\Controllers\PaymentsController@show');
@@ -104,6 +110,13 @@ Route::get('llego/{id}', 'App\Http\Controllers\DiasCursoClienteController@show')
 Route::post('llego', 'App\Http\Controllers\DiasCursoClienteController@store');
 Route::put('llego/{id}', 'App\Http\Controllers\DiasCursoClienteController@update');
 Route::delete('llego/{id}', 'App\Http\Controllers\DiasCursoClienteController@delete');
+
+//ForminduccionController CRUD
+Route::get('forminduccion', 'App\Http\Controllers\ForminduccionController@index');
+Route::get('forminduccion/{id}', 'App\Http\Controllers\ForminduccionController@show');
+Route::post('forminduccion', 'App\Http\Controllers\ForminduccionController@store');
+Route::put('forminduccion/{id}', 'App\Http\Controllers\ForminduccionController@update');
+Route::delete('forminduccion/{id}', 'App\Http\Controllers\ForminduccionController@delete');
 
 Route::group(['middleware' => ['jwt.verify']], function() {
        /*AÑADE AQUI LAS RUTAS QUE QUIERAS PROTEGER CON JWT*/
