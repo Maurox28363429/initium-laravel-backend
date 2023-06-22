@@ -11,7 +11,8 @@ class pases extends Model
     protected $fillable=[
         'client_id',
         'curso_id',
-        'pase'
+        'pase',
+        "numero_de_silla"
     ];
     public function client()
     {

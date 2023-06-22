@@ -272,11 +272,11 @@ class ClientesController extends Controller
             $data= $request->except(['referrals_code']);
             //obtener el ultimo curso SIC
             $sic='SIC';
-            //$last_curso=Cursos::query()
-//                ->orderBy('id','desc')
- //               ->where('name',"LIKE","%".$sic."%")
-   //             ->first();
-	    //$data['curso_id']=$last_curso->id;
+            $last_curso=Cursos::query()
+               ->orderBy('id','desc')
+               ->where('name',"LIKE","%".$sic."%")
+               ->first();
+	       $data['curso_id']=$last_curso->id;
              //parsear o setear password
             $data["password"]=bcrypt($data["password"] ?? "12345");
             $name=$data['name'] ?? '';
@@ -306,29 +306,29 @@ class ClientesController extends Controller
                 $model->reference_person=$reference_person;
             }
             $model->save();
-        //enviar correo si es valido 0406f231-9899-47d3-a951-f20006e66c25
-        try {
-            $enviado=$this->sendMail($data['email'],31336310,[
-                "user_name"=>$request->input("name")." ".$request->input("last_name")
-            ]);
-            if($enviado->message!="OK"){
-                throw new \Exception("Error", 404);
-            }
-        } catch (\Exception $e) {
+        // //enviar correo si es valido 0406f231-9899-47d3-a951-f20006e66c25
+        // try {
+        //     $enviado=$this->sendMail($data['email'],31336310,[
+        //         "user_name"=>$request->input("name")." ".$request->input("last_name")
+        //     ]);
+        //     if($enviado->message!="OK"){
+        //         throw new \Exception("Error", 404);
+        //     }
+        // } catch (\Exception $e) {
 
-            return response()->json([
-               "message"=>"Por favor, colocar un correo real",
-               "error"=>"Por favor, colocar un correo real"
-            ],500);
-        }
-        $this->sendMail("registro@grupoinitium.com",31336361,[
-            "data_email"=>$data["email"],
-            "data_name"=>$data["name"],
-            "data_last_name"=>$data["last_name"],
-            "data_nickname"=>$data["Nickname"],
-            "accept_contract"=>"Acepto",
-            "data_phone"=>$data["phone"]
-        ]);
+        //     return response()->json([
+        //        "message"=>"Por favor, colocar un correo real",
+        //        "error"=>"Por favor, colocar un correo real"
+        //     ],200);
+        // }
+        // $this->sendMail("registro@grupoinitium.com",31336361,[
+        //     "data_email"=>$data["email"],
+        //     "data_name"=>$data["name"],
+        //     "data_last_name"=>$data["last_name"],
+        //     "data_nickname"=>$data["Nickname"],
+        //     "accept_contract"=>"Acepto",
+        //     "data_phone"=>$data["phone"]
+        // ]);
             DB::commit();
             return [
                 "message"=>"Datos creados",

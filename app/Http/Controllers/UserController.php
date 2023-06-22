@@ -196,6 +196,9 @@ class UserController extends Controller
             return response()->json(['error' => 'No se pudo iniciar'], 500);
         }
         $user=User::where('email',$request->input('email'))->limit(2)->first();
+        if($user->role_id!=1){
+            return response()->json(['error' => 'No se pudo iniciar, el usuario no es admin'], 500);
+        }
         if($user->active==0){
             return response()->json([
                'user'=>$user,
