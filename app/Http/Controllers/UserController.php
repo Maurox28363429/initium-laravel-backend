@@ -283,6 +283,7 @@ class UserController extends Controller
                 $data['form_resolve']=0;
                 $user = User::create($data);
                 $token = JWTAuth::fromUser($user);
+                /*
                 $order=Order::create([
                     "reason"=>($request->input('nombre_paquete') ?? 'Paquete por defecto'),
                     "user_id"=>$user->id,
@@ -293,6 +294,7 @@ class UserController extends Controller
                     "pending"=>$request->input('price') ?? 0,
                     "gol"=>''
                 ]);
+                */
             DB::commit();
                 return response()->json(compact('user','token','order'),201);
         }catch(\Exception $e){
