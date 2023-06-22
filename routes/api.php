@@ -111,12 +111,24 @@ Route::post('llego', 'App\Http\Controllers\DiasCursoClienteController@store');
 Route::put('llego/{id}', 'App\Http\Controllers\DiasCursoClienteController@update');
 Route::delete('llego/{id}', 'App\Http\Controllers\DiasCursoClienteController@delete');
 
+//ForminduccionController CRUD GOL
+Route::get('forminduccion', 'App\Http\Controllers\FormEciController@index');
+Route::get('forminduccion/{id}', 'App\Http\Controllers\FormEciController@show');
+Route::post('forminduccion', 'App\Http\Controllers\FormEciController@store');
+Route::put('forminduccion/{id}', 'App\Http\Controllers\FormEciController@update');
+Route::delete('forminduccion/{id}', 'App\Http\Controllers\FormEciController@delete');
 //ForminduccionController CRUD
-Route::get('forminduccion', 'App\Http\Controllers\ForminduccionController@index');
-Route::get('forminduccion/{id}', 'App\Http\Controllers\ForminduccionController@show');
-Route::post('forminduccion', 'App\Http\Controllers\ForminduccionController@store');
-Route::put('forminduccion/{id}', 'App\Http\Controllers\ForminduccionController@update');
-Route::delete('forminduccion/{id}', 'App\Http\Controllers\ForminduccionController@delete');
+Route::get('form_eci', 'App\Http\Controllers\FormEciController@index');
+Route::get('form_eci/{id}', 'App\Http\Controllers\FormEciController@show');
+Route::post('form_eci', 'App\Http\Controllers\FormEciController@store');
+Route::put('form_eci/{id}', 'App\Http\Controllers\FormEciController@update');
+Route::delete('form_eci/{id}', 'App\Http\Controllers\FormEciController@delete');
+//ForminduccionController CRUD
+Route::get('form_seg', 'App\Http\Controllers\FormSegController@index');
+Route::get('form_seg/{id}', 'App\Http\Controllers\FormSegController@show');
+Route::post('form_seg', 'App\Http\Controllers\FormSegController@store');
+Route::put('form_seg/{id}', 'App\Http\Controllers\FormSegController@update');
+Route::delete('form_seg/{id}', 'App\Http\Controllers\FormSegController@delete');
 
 Route::group(['middleware' => ['jwt.verify']], function() {
        /*AÑADE AQUI LAS RUTAS QUE QUIERAS PROTEGER CON JWT*/
