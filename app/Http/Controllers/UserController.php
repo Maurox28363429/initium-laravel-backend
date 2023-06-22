@@ -209,6 +209,7 @@ class UserController extends Controller
     }
     public function authenticate_participante(Request $request)
     {
+        
         $credentials = $request->only('email', 'password');
         try {
             if (!$token = JWTAuth::attempt($credentials)) {
@@ -280,7 +281,7 @@ class UserController extends Controller
                     ->orderBy('id','desc')
                     ->where('name',"LIKE","%".$sic."%")
                 ->first();
-                $data["password"] = bcrypt($data["password"] ?? "12345");
+                $data["password"] = bcrypt($data["password"]);
                 $data["curso_actual_id"]=$last_curso->id;
                 $data['form_resolve']=0;
                 $user = User::create($data);
