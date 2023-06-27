@@ -69,7 +69,8 @@ class Clientes extends Model
     }
     public function getPaseAttribute()
     {
-        return pases::where('client_id',$this->attributes['id'])->where('curso_id',$this->attributes['curso_id'])->count();  
+        $curso=isset($this->attributes['curso_id'])? $this->attributes['curso_id']:null;
+        return pases::where('client_id',$this->attributes['id'])->where('curso_id',$curso)->count();  
     }
     public function llego()
     {

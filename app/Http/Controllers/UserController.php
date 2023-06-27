@@ -276,13 +276,13 @@ class UserController extends Controller
                         ), 400);
                 }
                 $data=$request->except(['price','nombre_paquete']) ?? [];
-                $sic='SIC';
-                $last_curso=Cursos::query()
-                    ->orderBy('id','desc')
-                    ->where('name',"LIKE","%".$sic."%")
-                ->first();
+                // $sic='SIC';
+                // $last_curso=Cursos::query()
+                //     ->orderBy('id','desc')
+                //     ->where('name',"LIKE","%".$sic."%")
+                // ->first();
                 $data["password"] = bcrypt($data["password"]);
-                $data["curso_actual_id"]=$last_curso->id;
+                // $data["curso_actual_id"]=$last_curso->id;
                 $data['form_resolve']=0;
                 $user = User::create($data);
                 $token = JWTAuth::fromUser($user);
@@ -299,7 +299,7 @@ class UserController extends Controller
                 ]);
                 */
             DB::commit();
-                return response()->json(compact('user','token','order'),201);
+                return response()->json(compact('user','token'),201);
         }catch(\Exception $e){
             DB::rollback();
             return $this->Error($e);

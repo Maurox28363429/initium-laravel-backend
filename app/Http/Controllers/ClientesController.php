@@ -271,12 +271,12 @@ class ClientesController extends Controller
             //data general
             $data= $request->except(['referrals_code']);
             //obtener el ultimo curso SIC
-            $sic='SIC';
-            $last_curso=Cursos::query()
-               ->orderBy('id','desc')
-               ->where('name',"LIKE","%".$sic."%")
-               ->first();
-	       $data['curso_id']=$last_curso->id;
+           //  $sic='SIC';
+           //  $last_curso=Cursos::query()
+           //     ->orderBy('id','desc')
+           //     ->where('name',"LIKE","%".$sic."%")
+           //     ->first();
+	       // $data['curso_id']=$last_curso->id;
              //parsear o setear password
             $data["password"]=bcrypt($data["password"] ?? "12345");
             $name=$data['name'] ?? '';

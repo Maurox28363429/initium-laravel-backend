@@ -46,9 +46,9 @@ class OrderController extends Controller
 		   "error"=>"Cliente no valido"
 		],404);
 	   }else{
-		if($client->curso_id==null){
+		
 		  $client->update(['curso_id'=>$request->input('curso_id')]);
-		}
+		
 	  }
             return $this->HelpStore(
                 Models::query(),
