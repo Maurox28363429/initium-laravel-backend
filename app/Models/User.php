@@ -12,7 +12,9 @@ use App\Models\{
     forminduccion,
     form_eci,
     form_seg,
-    Cursos
+    Cursos,
+    Clientes,
+    User
 };
 class User extends Authenticatable implements JWTSubject
 {
@@ -32,7 +34,8 @@ class User extends Authenticatable implements JWTSubject
         'active',
         "curso_actual_id",
         'form_resolve',
-        'gol'
+        'gol',
+        'img'
     ];
 
     /**
@@ -51,6 +54,15 @@ class User extends Authenticatable implements JWTSubject
         'form_seg',
         'curso_type'
     ];
+    public function getFormResolveAttribute()
+    {
+
+        return Clientes::where('user_id',$this->attributes['id'])->count();
+    }
+    public function getCursoActualIdAttribute()
+    {
+        return Clientes::where('user_id',$this->attributes['id'])->first()->curso_id ?? null;
+    }
     public function getFormGolAttribute()
     {
         return forminduccion::where('user_id',$this->attributes['id'])->count();
@@ -65,7 +77,7 @@ class User extends Authenticatable implements JWTSubject
     }
     public function getCursoTypeAttribute()
     {
-        $curso_id=$this->attributes['curso_actual_id'] ?? null;
+        $curso_id=Clientes::where('user_id',$this->attributes['id'])->first()->curso_id ?? null;
         if(!$curso_id){
             return 'No definido';
         }
@@ -105,6 +117,13 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+    public function getImgAttribute($value){
+        if($value==null || $value==''){
+            return "https://placehold.co/600x400/png";
+        }else{
+            return $value;
+        }
     }
 
 }

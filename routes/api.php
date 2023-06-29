@@ -68,11 +68,11 @@ Route::post('notis', 'App\Http\Controllers\NotifyController@store');
 Route::put('noti/{id}', 'App\Http\Controllers\NotifyController@update');
 Route::delete('noti/{id}', 'App\Http\Controllers\NotifyController@delete');
 //Planes de pago CRUD
-Route::get('planes_pago', 'App\Http\Controllers\PaymentsController@index');
-Route::get('planes_pago/{id}', 'App\Http\Controllers\PaymentsController@show');
-Route::post('planes_pago', 'App\Http\Controllers\PaymentsController@store');
-Route::put('planes_pago/{id}', 'App\Http\Controllers\PaymentsController@update');
-Route::delete('planes_pago/{id}', 'App\Http\Controllers\PaymentsController@delete');
+Route::get('planes_pago', 'App\Http\Controllers\PlanesCursoController@index');
+Route::get('planes_pago/{id}', 'App\Http\Controllers\PlanesCursoController@show');
+Route::post('planes_pago', 'App\Http\Controllers\PlanesCursoController@store');
+Route::post('planes_pago/{id}', 'App\Http\Controllers\PlanesCursoController@update');
+Route::delete('planes_pago/{id}', 'App\Http\Controllers\PlanesCursoController@delete');
 //Orders CRUD
 Route::get('admin-orders', 'App\Http\Controllers\OrderController@index');
 Route::get('admin-order/{id}', 'App\Http\Controllers\OrderController@show');

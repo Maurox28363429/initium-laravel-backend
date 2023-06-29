@@ -141,6 +141,9 @@ class UserController extends Controller
                 if( isset($data['password']) ){
                     $data["password"]=bcrypt($data["password"]);
                 }
+                if($request->hasFile('img')){
+                    $data["img"]=$this->HelpUpload($request->file('img'));
+                }
                 $user->update($data);
             DB::commit();
             return response()->json([
@@ -250,6 +253,9 @@ class UserController extends Controller
                 }
                 $data=$request->all();
                 $data["password"]=bcrypt($data["password"] ?? "12345");
+                if($request->hasFile('img')){
+                    $data["img"]=$this->HelpUpload($request->file('img'));
+                }
                 $user = User::create($data);
                 $token = JWTAuth::fromUser($user);
             DB::commit();
@@ -284,6 +290,9 @@ class UserController extends Controller
                 $data["password"] = bcrypt($data["password"]);
                 // $data["curso_actual_id"]=$last_curso->id;
                 $data['form_resolve']=0;
+                if($request->hasFile('img')){
+                    $data["img"]=$this->HelpUpload($request->file('img'));
+                }
                 $user = User::create($data);
                 $token = JWTAuth::fromUser($user);
                 /*

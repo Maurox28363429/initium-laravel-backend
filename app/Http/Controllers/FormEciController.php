@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\{
-    form_eci as Models
+    form_eci as Models,
+    Clientes,
+    asistencia_curso
 };
 use App\Http\Traits\HelpersTrait;
 use Exception;
@@ -48,6 +50,11 @@ class FormEciController extends Controller
                         $data
                     );
                 }
+                    $client=Clientes::where('user_id',$user_id)->first();
+                    asistencia_curso::query()->create([
+                        "curso_id"=>$client->curso_id,
+                        "client_id"=>$client->id
+                ]);
             DB::commit();
             return $response;
         } catch (\Exception $e) {

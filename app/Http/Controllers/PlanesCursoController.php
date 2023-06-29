@@ -13,6 +13,10 @@ class PlanesCursoController extends Controller
     public function index(Request $request)
     {
         $query = Models::query()->with([]);
+        $search=$request->input('search') ?? null;
+        if($search){
+            $query->where('nombre','like',"%$search%");
+        }
         return $this->HelpPaginate(
             $query
         );
@@ -27,6 +31,7 @@ class PlanesCursoController extends Controller
     }
     public function store(Request $request)
     {
+        
         $data = $request->all();
         if ($request->hasFile('img')) {
             $file = $request->file('img');

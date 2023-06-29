@@ -125,10 +125,10 @@ class ClientesController extends Controller
 
             $query->with(['llego' => function ($query)use($curso_id){
                 $query
-                ->where('curso_id',$curso_id)
-                ->whereRaw('day(created_at) = day(now())')
-                ->whereRaw('MONTH(created_at) = MONTH(now())')
-                ->whereRaw('YEAR(created_at) = YEAR(now())');
+                ->where('curso_id',$curso_id);
+                // ->whereRaw('day(created_at) = day(now())')
+                // ->whereRaw('MONTH(created_at) = MONTH(now())')
+                // ->whereRaw('YEAR(created_at) = YEAR(now())');
             }]);
 
 	   $llegaron=dias_curso_cliente::query()
