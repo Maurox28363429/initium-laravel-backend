@@ -61,14 +61,14 @@ class UserController extends Controller
             $email=$request->input('email') ?? null;
             $code=$request->input('code') ?? null;
             if(!$email){
-                return ["message"=>"Correo no enviado","status"=>404];
+                return response()->json(["message"=>"Correo no enviado","status"=>404],404);
             }
             if(!$code){
-                return ["message"=>"Codigo no enviado","status"=>404];
+                return response()->json(["message"=>"Codigo no enviado","status"=>404],404);
             }
             $user=User::where('email',$email)->where('recovery_cod',$code)->first();
             if(!$user){
-                return ["message"=>"Usuario no encontrado","status"=>404];
+                return response()->json(["message"=>"Usuario no encontrado","status"=>404],404);
             }
             return [
                 'message'=>"Usuario y codigo validos",
@@ -102,8 +102,13 @@ class UserController extends Controller
             return [
                 "message"=>"Usuario Actualizado con exito"
             ];
-        } catch (\Exception $e) {
-            return $this->HelpError($e);
+        } catch (\Exception $error) {
+            return response()->json([
+                "file"=>$error->getFile(),
+                "message"=>$error->getMessage(),
+                "error"=>$error->getMessage(),
+                "line"=>$error->getLine()
+            ],404);
         }
     }
     public function index(Request $request){
