@@ -17,6 +17,10 @@ class FormEciController extends Controller
     public function index(Request $request)
     {
         $query = Models::query()->with([]);
+        $user_id=$request->input('user_id') ?? null;
+        if($user_id){
+            return $query->where('user_id',$user_id)->first();
+        }
         return $this->HelpPaginate(
             $query
         );

@@ -146,8 +146,12 @@ class UserController extends Controller
                 if( isset($data['password']) ){
                     $data["password"]=bcrypt($data["password"]);
                 }
-                if($request->hasFile('img')){
-                    $data["img"]=$this->HelpUpload($request->file('img'));
+                
+                if ($request->hasFile('img')) {
+                    $file = $request->file('img');
+                    $name = time() . $file->getClientOriginalName();
+                    $file->move(public_path() . '/images/', $name);
+                    $data['img'] = $name;
                 }
                 $user->update($data);
             DB::commit();
@@ -258,8 +262,12 @@ class UserController extends Controller
                 }
                 $data=$request->all();
                 $data["password"]=bcrypt($data["password"] ?? "12345");
-                if($request->hasFile('img')){
-                    $data["img"]=$this->HelpUpload($request->file('img'));
+
+                if ($request->hasFile('img')) {
+                    $file = $request->file('img');
+                    $name = time() . $file->getClientOriginalName();
+                    $file->move(public_path() . '/images/', $name);
+                    $data['img'] = $name;
                 }
                 $user = User::create($data);
                 $token = JWTAuth::fromUser($user);
@@ -295,8 +303,11 @@ class UserController extends Controller
                 $data["password"] = bcrypt($data["password"]);
                 // $data["curso_actual_id"]=$last_curso->id;
                 $data['form_resolve']=0;
-                if($request->hasFile('img')){
-                    $data["img"]=$this->HelpUpload($request->file('img'));
+                if ($request->hasFile('img')) {
+                    $file = $request->file('img');
+                    $name = time() . $file->getClientOriginalName();
+                    $file->move(public_path() . '/images/', $name);
+                    $data['img'] = $name;
                 }
                 $user = User::create($data);
                 $token = JWTAuth::fromUser($user);

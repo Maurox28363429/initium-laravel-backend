@@ -32,6 +32,7 @@ Route::post('putRecovery', 'App\Http\Controllers\UserController@putRecovery');
 Route::get('users', 'App\Http\Controllers\UserController@index');
 Route::get('user/{id}', 'App\Http\Controllers\UserController@show');
 Route::put('user/{id}', 'App\Http\Controllers\UserController@update');
+Route::post('user/{id}', 'App\Http\Controllers\UserController@update');
 Route::delete('user/{id}', 'App\Http\Controllers\UserController@delete');
 //Etapas CRUD
 Route::get('etapas', 'App\Http\Controllers\EtapasController@index');

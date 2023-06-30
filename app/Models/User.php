@@ -57,7 +57,12 @@ class User extends Authenticatable implements JWTSubject
     public function getFormResolveAttribute()
     {
 
-        return Clientes::where('user_id',$this->attributes['id'])->count();
+        $form=Clientes::where('user_id',$this->attributes['id'])->count();
+        if($form!=0){
+            return true;
+        }else{
+            return false;
+        }
     }
     public function getCursoActualIdAttribute()
     {
@@ -65,15 +70,30 @@ class User extends Authenticatable implements JWTSubject
     }
     public function getFormGolAttribute()
     {
-        return forminduccion::where('user_id',$this->attributes['id'])->count();
+        $form=forminduccion::where('user_id',$this->attributes['id'])->count();
+        if($form!=0){
+            return true;
+        }else{
+            return false;
+        }
     }
     public function getFormEciAttribute()
     {
-        return form_eci::where('user_id',$this->attributes['id'])->count();
+        $form=form_eci::where('user_id',$this->attributes['id'])->count();
+        if($form!=0){
+            return true;
+        }else{
+            return false;
+        }
     }
     public function getFormSegAttribute()
     {
-        return form_seg::where('user_id',$this->attributes['id'])->count();
+        $form=form_seg::where('user_id',$this->attributes['id'])->count();
+        if($form!=0){
+            return true;
+        }else{
+            return false;
+        }
     }
     public function getCursoTypeAttribute()
     {
@@ -122,8 +142,7 @@ class User extends Authenticatable implements JWTSubject
         if($value==null || $value==''){
             return "https://placehold.co/600x400/png";
         }else{
-            return $value;
+            return url('images/' . $this->attributes['img']);
         }
     }
-
 }
