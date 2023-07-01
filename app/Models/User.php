@@ -35,7 +35,8 @@ class User extends Authenticatable implements JWTSubject
         "curso_actual_id",
         'form_resolve',
         'gol',
-        'img'
+        'img',
+        "reglas"
     ];
 
     /**
@@ -57,7 +58,7 @@ class User extends Authenticatable implements JWTSubject
     public function getFormResolveAttribute()
     {
 
-        $form=Clientes::where('user_id',$this->attributes['id'])->count();
+        $form=Clientes::where('user_id',$this->attributes['id'])->where('Nickname','!=','')->count();
         if($form!=0){
             return true;
         }else{

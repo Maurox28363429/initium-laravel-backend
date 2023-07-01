@@ -22,4 +22,11 @@ class forminduccion extends Model
         "recursante",
         "curso_id"
     ];
+    protected $appends = [
+        'accept_contract'
+    ];
+    public function getAcceptContractAttribute()
+    {
+        return true;
+    }
 }

@@ -248,9 +248,18 @@ class ClientesController extends Controller
             DB::beginTransaction();
                 $data= $request->all() ?? [];
                 $data["password"]=bcrypt($data["password"] ?? "12345");
-                $datos_model=Models::create($data);
-                $user=User::where('id', $data['user_id'])->first();
-                $user->update(['form_resolve' => 1]);
+                $client_search=Models::where('user_id',$data['user_id'])->first();
+                $user=User::find($data['user_id']);
+            
+                if($client_search){
+                    $data_client=$request->except([
+                        'parentesco'
+                    ]);
+                    $datos_model=Models::where('user_id',$data['user_id'])->update($data_client);
+                }else{
+                    $datos_model=Models::create($data);
+                }
+                
             DB::commit();
             return response()->json([
                 "message"=>"Registrado correctamente",

@@ -309,8 +309,49 @@ class UserController extends Controller
                     $file->move(public_path() . '/images/', $name);
                     $data['img'] = $name;
                 }
+                
                 $user = User::create($data);
                 $token = JWTAuth::fromUser($user);
+                //crear client por defecto
+                $client=Clientes::create([
+                    'name'=>$data['name'],
+                    'last_name'=>'',
+                    'phone'=>'',
+                    'email'=>$data['email'],
+                    'birth_date'=>'',
+                    'nacionalidad'=>'',
+                    'civil_status'=>'',
+                    'pais'=>'',
+                    'accept_contract'=>'',
+                    "occupation"=>'',
+                    "objectives"=>'',
+                    "dni"=>'',
+                    "Nickname"=>'',
+                    "place_work"=>'',
+                    "referrals_code"=>'',
+                    "question_1"=>'',
+                    "question_2"=>'',
+                    "note_1"=>'',
+                    "note_2"=>'',
+                    "sexo"=>'',
+                    "reference_person"=>'',
+                    "user_id"=>$user->id
+                ]);
+                //crear la orden
+                $order=[
+                    "user_id"=>$user->id,
+                    "price"=>$data['product']['precio'] ?? 0,
+                    "payment_method"=>$data['paymentMethod'],
+                    'client_id'=>$client->id
+                ];
+                if($request->hasFile('capture.__key')) {
+                    $file = $request->file('img');
+                    $name = time() . $file->getClientOriginalName();
+                    $file->move(public_path() . '/images/pagos/', $name);
+                    $order['img_url'] = $name;
+                }
+                
+                Order::create($order);
                 /*
                 $order=Order::create([
                     "reason"=>($request->input('nombre_paquete') ?? 'Paquete por defecto'),

@@ -30,6 +30,13 @@ class form_eci extends Model
         "objective_3",
         "recursante"
     ];
+     protected $appends = [
+        'accept_contract'
+    ];
+    public function getAcceptContractAttribute()
+    {
+        return true;
+    }
     public function curso()
     {
         return $this->belongsTo(Cursos::class, 'curso_id');
