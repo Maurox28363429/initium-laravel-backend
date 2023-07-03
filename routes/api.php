@@ -150,3 +150,422 @@ Route::get('lider', 'App\Http\Controllers\ClientesController@lider');
 Route::get('companeros', 'App\Http\Controllers\ClientesController@companeros');
 
 Route::post('importar_estudiantes','App\Http\Controllers\ClientesController@import_estudiantes');
+
+Route::get("horario",function(Request $request ){
+    $cursos=[
+        'SIC',
+        'GOL',
+        'ECI',
+    ];
+    $curso_input=$request->input('curso') ?? null;
+    if($curso_input){
+        $curso_input=strtoupper($curso_input);
+    }
+    if($curso_input && in_array($curso_input,$cursos)){
+        $sic=[
+            [
+                "id"=> 1,
+                "title"=> 'Inscripción y entrenamiento',
+                "day"=> 'Miércoles',
+                "start"=> '6:00 pm',
+                "end"=> '10:30 pm',
+                "startInscripcion"=> '5:00 pm',
+                "endInscripcion"=> '6:00 pm',
+            ],
+            [
+                "id"=> 2,
+                "title"=> 'Entrenamiento',
+                "day"=> 'Jueves',
+                "start"=> '6:00 pm',
+                "end"=> '10:30 pm',
+            ],
+            [
+                "id"=> 3,
+                "title"=> 'Entrenamiento',
+                "day"=> 'Viernes',
+                "start"=> '6:00 pm',
+                "end"=> '10:30 pm',
+            ],
+            [
+                "id"=> 4,
+                "title"=> 'Entrenamiento',
+                "day"=> 'Sábado',
+                "start"=> '10:00 am',
+                "end"=> '9:30 pm',
+            ],
+            [
+                "id"=> 5,
+                "title"=> 'Entrenamiento',
+                "day"=> 'Domingo',
+                "start"=> '10:00 am',
+                "end"=> '7:00 pm',
+            ]
+        ];
+        $ECI=[
+            [
+                "id"=> 6,
+                "title"=> 'Inscripción y entrenamiento',
+                "day"=> 'Miercoles',
+                "start"=> '10:30 am',
+                "end"=> '11:45 pm',
+                "startInscripcion"=> '12:00 pm',
+                "endInscripcion"=> '11:00 pm',
+            ],
+            [
+                "id"=> 7,
+                "title"=> 'Entrenamiento',
+                "day"=> 'Jueves',
+                "start"=> '12:00 pm',
+                "end"=> '11:00 pm',
+            ],
+            [
+                "id"=> 8,
+                "title"=> 'Entrenamiento',
+                "day"=> 'Viernes',
+                "start"=> '12:00 pm',
+                "end"=> '11:00 pm',
+            ],
+            [
+                "id"=> 9,
+                "title"=> 'Entrenamiento',
+                "day"=> 'Sabado',
+                "start"=> '10:00 am',
+                "end"=> '10:00 pm',
+            ],
+            [
+                "id"=> 10,
+                "title"=> 'Entrenamiento',
+                "day"=> 'Domingo',
+                "start"=> '10:00 am',
+                "end"=> '7:00 pm',
+            ],
+        ];
+        $GOL=[
+            [
+                "titulo"=>"Primer fin de semana",
+                "data"=>[
+                    [
+                        "id"=> 11,
+                        "title"=> 'Entrenamiento',
+                        "day"=> 'Viernes',
+                        "start"=> '7:00 pm',
+                        "end"=> 'Depende 100% del compromiso del grupo'
+                    ],
+                    [
+                        "id"=> 12,
+                        "title"=> 'Entrenamiento',
+                        "day"=> 'Sábado',
+                        "start"=> '10:00 am',
+                        "end"=> 'Depende 100% del compromiso del grupo'
+                    ],
+                    [
+                        "id"=> 13,
+                        "title"=> 'Entrenamiento',
+                        "day"=> 'Domingo',
+                        "start"=> '11:00 am',
+                        "end"=> 'Depende 100% del compromiso del grupo'
+                    ],
+                ]
+            ],
+            [
+                "titulo"=>"Segundo fin de semana",
+                "data"=>[
+                    [
+                        "id"=> 14,
+                        "title"=> 'Entrenamiento',
+                        "day"=> 'Viernes',
+                        "start"=> '5:30 pm',
+                        "end"=> 'Depende 100% del compromiso del grupo'
+                    ],
+                    [
+                        "id"=> 16,
+                        "title"=> 'Entrenamiento',
+                        "day"=> 'Sábado',
+                        "start"=> '8:00 am',
+                        "end"=> 'Depende 100% del compromiso del grupo'
+                    ],
+                    [
+                        "id"=> 13,
+                        "title"=> 'Entrenamiento',
+                        "day"=> 'Domingo',
+                        "start"=> '10:00 am',
+                        "end"=> 'Depende 100% del compromiso del grupo'
+                    ],
+                ]
+            ],
+            [
+                "titulo"=>"Tercer fin de semana",
+                "data"=>[
+                    [
+                        "id"=> 14,
+                        "title"=> 'Entrenamiento',
+                        "day"=> 'Viernes',
+                        "start"=> '5:30 pm',
+                        "end"=> 'Depende 100% del compromiso del grupo'
+                    ],
+                    [
+                        "id"=> 16,
+                        "title"=> 'Entrenamiento',
+                        "day"=> 'Sábado',
+                        "start"=> '8:00 am',
+                        "end"=> 'Depende 100% del compromiso del grupo'
+                    ],
+                    [
+                        "id"=> 13,
+                        "title"=> 'Outdoors',
+                        "day"=> 'Viernes - Domingo',
+                        "start"=> 'Partida Viernes 7:30 pm',
+                        "end"=> 'Regreso domingo 7:00 pm'
+                    ],
+                ]
+            ],
+        ];
+
+        $data=[];
+        switch ($curso_input) {
+            case 'SIC':
+                $data=$sic;
+                break;
+            case 'ECI':
+                $data=$ECI;
+                break;
+            case 'GOL':
+                $data=$GOL;
+                break;
+            default:
+                $data=$sic;
+                break;
+        }
+        return response()->json([
+            'data'=>$data
+        ],200);
+    }else{
+        return response()->json([
+            'message'=>'Curso no encontrado'
+        ],404);
+    }
+});
+
+
+Route::get("reglas",function(Request $request ){
+    $cursos=[
+        'SIC',
+        'GOL',
+        'ECI',
+    ];
+    $curso_input=$request->input('curso') ?? null;
+    if($curso_input){
+        $curso_input=strtoupper($curso_input);
+    }
+    if($curso_input && in_array($curso_input,$cursos)){
+        $ECI=[
+             [
+                "id"=> 1,
+                "number"=> 1,
+                "description"=>
+                'Mantenga absoluta confidencialidad de las vivencias y experiencias de los demás participantes. Jamás hable, comente o divulgue ningún tipo de información acerca del contenido de la Experiencia de Coaching Interpersona.',
+            ],
+            [
+                "id"=> 2,
+                "number"=> 2,
+                "description"=>
+                ' Sea puntual. El entrenamiento comienza a las doce del mediodía el miércoles, el jueves, y el viernes, a las diez de la mañana el sábado, y el domingo.',
+            ],
+            [
+                "id"=> 3,
+                "number"=> 3,
+                "description"=>
+                'No hable con las personas sentadas a su alrededor. Ni fume, coma, beba o mastique chicle dentro del salón de entrenamiento.',
+            ],
+            [
+                "id"=> 4,
+                "number"=> 4,
+                "description"=>
+                'Sea responsable por su bienestar físico. Aliméntese en forma adecuada y duerma lo suficiente. Por sobre todo, no olvide tomar los medicamentos recetados por su médico en la forma y horarios prescritos por el mismo.',
+            ],
+            [
+                "id"=> 5,
+                "number"=> 5,
+                "description"=>
+                ' No fume marihuana, ni consuma ningún tipo de bebida alcohólica o droga no recetada por su médico durante los cinco días.',
+            ],
+            [
+                "id"=> 6,
+                "number"=> 6,
+                "description"=>
+                'Lleve su nombre en un lugar visible durante todo el entrenamiento. Entregue su nametag antes de retirarse para el recreo de las comidas y antes de irse todas las noches.',
+            ],
+            [
+                "id"=> 7,
+                "number"=> 7,
+                "description"=>
+                'No use ningún tipo de grabador durante el entrenamiento. Sólo tome notas dentro del salón cuándo le sea indicado por el coach. Teléfonos celulares y dispositivos electrónicos similares deberán permanecer apagados durante todo el entrenamiento.',
+            ],
+            [
+                "id"=> 8,
+                "number"=> 8,
+                "description"=>
+                'No se siente al lado de personas conocidas desde antes de comenzar el SIC.',
+            ],
+            [
+                "id"=> 9,
+                "number"=> 9,
+                "description"=>
+                'No comience ningún tipo de relación sexual nueva con ningún participante por un período mínimo de 30 (treinta) días después de completar el entrenamiento.',
+            ],
+            [
+                "id"=> 10,
+                "number"=> 10,
+                "description"=>
+                'No realice ningún tipo de violencia física, hacia usted mismo, ni contra ninguna otra persona, tampoco hacia elementos de propiedad.',
+            ],
+        ];
+        $SIC=[
+            [
+                "id"=> 11,
+                "number"=> 1,
+                "description"=>
+                "Respeta la confidencialidad acerca de las vivencias y experiencias de los demás participantes.",
+            ],
+            [
+                "id"=> 12,
+                "number"=> 2,
+                "description"=>
+                "No hable con las personas sentadas a su alrededor. Haga preguntas, converse y comparta con los demás participantes únicamente cuando les sea permitido por el coach durante los períodos designados para tales actividades."
+            ],
+            [
+                "id"=> 13,
+                "number"=> 3,
+                "description"=>
+                "Participe en todas las sesiones del seminario. El seminario completo comprende los cinco días."
+            ],
+            [
+                "id"=> 14,
+                "number"=> 4,
+                "description"=>
+                "Sea puntual. Esté sentado antes de que termine la música. Momentos antes del comienzo de cada sesión e inmediatamente después de cada descanso, usted escuchará una pieza musical de aproximadamente un minuto y medio de duración. El seminario comienza a las seis de la tarde el miércoles, jueves y viernes, diez de la mañana el sábado y diez de la mañana el domingo."
+            ],
+            [
+                "id"=> 15,
+                "number"=> 5,
+                "description"=>
+                "No fume, coma, beba o masitque chicle dentro del salón donde se dicta el seminario."
+            ],
+            [
+                "id"=> 16,
+                "number"=> 6,
+                "description"=>
+                "No fume marihuana, ni consuma ningún tipo de bebida alcohólica o droga no recetada por su médico durante los cinco días."
+            ],
+            [
+                "id"=> 17,
+                "number"=> 7,
+                "description"=>
+                "Sea responsable por su bienestar físico. Aliméntese adecuadamente, duerma y descanse lo suficiente, y recuerde tomar sus medicamentos recetados en los horarios recomendados por su médico."
+            ],
+            [
+                "id"=> 18,
+                "number"=> 8,
+                "description"=>
+                "Lleve su nombre en un lugar visible durante todo el seminario. Devuélvalo al final de cada día y antes de las comidas."
+            ],
+            [
+                "id"=> 19,
+                "number"=> 9,
+                "description"=>
+                "No use ningún tipo de grabador ni tomen notas dentro del salón, durante todo el seminario. Teléfonos celulares y dispositivos electrónicos similares deberán permanecer apagados durante todo el seminario."
+            ],
+            [
+                "id"=> 20,
+                "number"=> 10,
+                "description"=>
+                "No se siente al lado de personas conocidas desde antes de comenzar el seminario."
+            ],
+        ];
+        $GOL=[
+           [
+                "id"=> 21,
+                "number"=> 1,
+                "description"=>
+                "Mantenga absoluta confidencialidad de las vivencias y experiencias de los demás participantes. Jamás hable, comente o divulgue ningún tipo de información acerca del contenido del entrenamiento."
+            ],
+            [
+                "id"=> 22,
+                "number"=> 2,
+                "description"=>
+                "Sea puntual."
+            ],
+            [
+                "id"=> 23,
+                "number"=> 3,
+                "description"=>
+                "No hable con las personas sentadas a su alrededor. Ni fume, coma, beba o masque chicle dentro del salón de entrenamiento."
+            ],
+            [
+                "id"=> 24,
+                "number"=> 4,
+                "description"=>
+                "Sea responsable por su bienestar físico. Aliméntese de forma adecuada y duerma lo suficiente. Por sobre todo, no olvide tomar los medicamentos recetados por su médico en la forma y horarios prescritos por el mismo."
+            ],
+            [
+                "id"=> 25,
+                "number"=> 5,
+                "description"=>
+                "No fume marihuana, ni consuma ningún tipo de bebida alcohólica o droga no recetada por su médico durante los fines de semana y reuniones de entrenamiento."
+            ],
+            [
+                "id"=> 26,
+                "number"=> 6,
+                "description"=>
+                "Sea responsable por su meta. Lleve su nombre en un lugar visible durante las sesiones de entrenamiento. Devuélvalo al finalizar su participación en GOL."
+            ],
+            [
+                "id"=> 27,
+                "number"=> 7,
+                "description"=>
+                "No use ningún tipo de grabador durante el curso. Sólo tomen notas dentro del salón cuando les sea indicado por el coach."
+            ],
+            [
+                "id"=> 28,
+                "number"=> 8,
+                "description"=>
+                "Teléfonos celulares y dispositivos electrónicos similares deberán permanecer apagados durante las sesiones de entrenamiento."
+            ],
+            [
+                "id"=> 29,
+                "number"=> 9,
+                "description"=>
+                "No realice ningún tipo de violencia física, hacia usted mismo, ni contra ninguna otra persona, tampoco hacia elementos de propiedad."
+            ],
+            [
+                "id"=> 30,
+                "number"=> 10,
+                "description"=>
+                "No inicien ningún tipo de relación sexual nueva con ningún participante por un período mínimo de 30 (treinta) días después de completar GOL."
+            ],
+        ];
+
+        $data=[];
+        switch ($curso_input) {
+            case 'SIC':
+                $data=$SIC;
+                break;
+            case 'ECI':
+                $data=$ECI;
+                break;
+            case 'GOL':
+                $data=$GOL;
+                break;
+            default:
+                $data=$sic;
+                break;
+        }
+        return response()->json([
+            'data'=>$data
+        ],200);
+    }else{
+        return response()->json([
+            'message'=>'Curso no encontrado'
+        ],404);
+    }
+});

@@ -98,6 +98,7 @@ class User extends Authenticatable implements JWTSubject
     }
     public function getCursoTypeAttribute()
     {
+        
         $curso_id=Clientes::where('user_id',$this->attributes['id'])->first()->curso_id ?? null;
         if(!$curso_id){
             return 'No definido';
@@ -116,7 +117,7 @@ class User extends Authenticatable implements JWTSubject
         if(str_contains($curso_name, "gol")){
             return 'GOL';
         }
-        return "No esta en un curso definido";
+        return null;
     }
     /**
      * The attributes that should be cast.
