@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
     use Illuminate\Http\Request;
     use App\Models\{
         Order as Models,
-        Clientes
+        Clientes,
+        User
     };
     use App\Http\Traits\HelpersTrait;
+    use Illuminate\Support\Facades\Http;
 class OrderController extends Controller
 {
     use HelpersTrait;
@@ -38,17 +40,16 @@ class OrderController extends Controller
         );
     }
     public function store(Request $request){
-    	   $data=$request->all();
-    	   $data['pending']=$data['price'];
+       $data=$request->all();
+       $data['pending']=$data['price'];
 	   $client=Clientes::find($request->input('client_id') ?? null);
 	   if(!$client){
-		return response()->json([
-		   "error"=>"Cliente no valido"
-		],404);
+    		return response()->json([
+    		   "error"=>"Cliente no valido"
+    		],404);
 	   }else{
-		
 		  $client->update(['curso_id'=>$request->input('curso_id')]);
-		
+          
 	  }
             return $this->HelpStore(
                 Models::query(),
@@ -65,6 +66,23 @@ class OrderController extends Controller
         //    }
     }
     public function update($id,Request $request){
+        $curso_id = $request->input('curso_id') ?? null;
+        $client_id = $request->input('client_id') ?? null;
+        $client=Clientes::find($request->input('client_id') ?? null);
+        if(!$client){
+            return response()->json([
+               "error"=>"Cliente no valido"
+            ],404);
+        }else{
+            $client->update(['curso_id'=>$curso_id]);
+            $user=User::query()->where('id',$client->user_id)->first();
+            $user->update([
+                "active"=>1
+              ]);
+            $realtime = Http::post('https://pocketbase.real.phoenixtechsa.com/api/collections/activacion_de_usuario_initium/records', [
+                        'user_id' => $user->id
+                    ]);
+        }
         return $this->HelpUpdate(
             Models::where("id",$id)->limit(1),
             $request->all()

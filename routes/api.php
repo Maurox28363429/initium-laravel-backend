@@ -169,7 +169,7 @@ Route::get("horario",function(Request $request ){
                 "day"=> 'Miércoles',
                 "start"=> '6:00 pm',
                 "end"=> '10:30 pm',
-                "startInscripcion"=> '5:00 pm',
+                "startInscripcion"=> '4:30 pm',
                 "endInscripcion"=> '6:00 pm',
             ],
             [
@@ -206,10 +206,13 @@ Route::get("horario",function(Request $request ){
                 "id"=> 6,
                 "title"=> 'Inscripción y entrenamiento',
                 "day"=> 'Miercoles',
-                "start"=> '10:30 am',
-                "end"=> '11:45 pm',
-                "startInscripcion"=> '12:00 pm',
-                "endInscripcion"=> '11:00 pm',
+                
+                "startInscripcion"=> '10:30 am',
+                "endInscripcion"=> '11:45 pm',
+
+                "start"=> '12:00 pm',
+                "end"=> '11:00 pm',
+
             ],
             [
                 "id"=> 7,

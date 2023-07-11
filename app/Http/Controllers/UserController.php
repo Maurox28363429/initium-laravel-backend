@@ -282,7 +282,7 @@ class UserController extends Controller
     public function inscribir(Request $request){
         try{
             DB::beginTransaction();
-
+            
                 $validator = Validator::make($request->all(), [
                     'name' => 'required|string|max:255',
                     'email' => 'required|string|email|max:255|unique:users',
@@ -309,7 +309,6 @@ class UserController extends Controller
                     $file->move(public_path() . '/images/', $name);
                     $data['img'] = $name;
                 }
-                
                 $user = User::create($data);
                 $token = JWTAuth::fromUser($user);
                 //crear client por defecto
