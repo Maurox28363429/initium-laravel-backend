@@ -37,10 +37,11 @@ class Clientes extends Model
     ];
     protected $appends = [
         'pagado_pendiente',
+        'enrrolador',
         'pase'
     ];
     public function orders(){
-    	   return $this->hasMany(Order::class,'client_id');
+    	   return $this->hasMany(Order::class,'client_id')->orderBy('created_at', 'desc');
     }
     public function getAcceptContractAttribute($value)
     {
@@ -58,7 +59,13 @@ class Clientes extends Model
     	   	"pendiente"=>$pendiente
         ];
     }
-
+    public function getEnrroladorAttribute(){
+            return Order::query()
+                    ->where('client_id',$this->attributes['id'])
+                    ->select(['gol'])
+                    ->orderBy('id','desc')
+                    ->first()->gol ?? 'No encontrado';
+    }
     public function curso()
     {
         return $this->belongsTo(Cursos::class, 'curso_id');

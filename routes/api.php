@@ -208,7 +208,7 @@ Route::get("horario",function(Request $request ){
                 "day"=> 'Miercoles',
                 
                 "startInscripcion"=> '10:30 am',
-                "endInscripcion"=> '11:45 pm',
+                "endInscripcion"=> '11:45 am',
 
                 "start"=> '12:00 pm',
                 "end"=> '11:00 pm',
@@ -247,6 +247,13 @@ Route::get("horario",function(Request $request ){
             [
                 "titulo"=>"Primer fin de semana",
                 "data"=>[
+                    [
+                        "id"=> 10,
+                        "title"=> 'Acreditación',
+                        "day"=> 'Viernes',
+                        "start"=> '6:00 pm',
+                        "end"=> '6:59 pm'
+                    ],
                     [
                         "id"=> 11,
                         "title"=> 'Entrenamiento',
@@ -520,7 +527,7 @@ Route::get("reglas",function(Request $request ){
                 "id"=> 26,
                 "number"=> 6,
                 "description"=>
-                "Sea responsable por su meta. Lleve su nombre en un lugar visible durante las sesiones de entrenamiento. Devuélvalo al finalizar su participación en GOL."
+                "Sea responsable por su nametag. Lleve su nombre en un lugar visible durante las sesiones de entrenamiento. Devuélvalo al finalizar su participación en GOL."
             ],
             [
                 "id"=> 27,

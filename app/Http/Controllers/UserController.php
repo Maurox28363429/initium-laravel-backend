@@ -120,7 +120,10 @@ class UserController extends Controller
             $query->where('role_id',$rol);
         }
         if($name){
-            $query->where('name','like','%'.$name.'%');
+            $query
+            ->where('name','like','%'.$name.'%')
+            ->orWhere('email',$name);
+
         }
         if($active){
             $query->where('active',$active);

@@ -103,7 +103,7 @@ class ClientesController extends Controller
         $curso_id=$request->input('curso_id') ?? null;
         $curso_status=$request->input('curso_status') ?? null;
         if($search){
-            $query->WhereRaw("CONCAT(`name`, ' ', `last_name`) LIKE ?", ['%'.$search.'%']);
+            $query->WhereRaw("CONCAT(`name`, ' ', `last_name`) LIKE ?", ['%'.$search.'%'])->orWhere('email','like','%'.$search.'%');
         }
 
 	$order_by_fecha=$request->input('fecha') ?? null;
@@ -146,9 +146,10 @@ class ClientesController extends Controller
         }
         $query->where('soft_delete',0);//eliminar los borrados
         if($assist && $curso_id){
-            $query->with(['orders' => function ($q2) use ($curso_id) {
-                $q2->where('curso_id', $curso_id);
-            }]);
+            // $query->with(['orders' => function ($q2) use ($curso_id) {
+            //     $q2->where('curso_id', $curso_id);
+            // }]);
+            $query->with(['orders']);
             //contar asistencia
     	    $query2=Models::query();
     	    $query2->where('curso_id',$curso_id)->orderBy('name','asc');
