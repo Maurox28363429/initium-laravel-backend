@@ -4,3 +4,8 @@
 [15-Jun-2023 21:28:21 UTC] PHP Fatal error:  Cannot redeclare App\Models\User::getActiveAttribute() in /home/phoenixt/api.initium.tarjetajovendiamante.com/app/Models/User.php on line 121
 [15-Jun-2023 21:28:37 UTC] PHP Fatal error:  Cannot redeclare App\Models\User::getActiveAttribute() in /home/phoenixt/api.initium.tarjetajovendiamante.com/app/Models/User.php on line 121
 [15-Jun-2023 21:28:45 UTC] PHP Fatal error:  Cannot redeclare App\Models\User::getActiveAttribute() in /home/phoenixt/api.initium.tarjetajovendiamante.com/app/Models/User.php on line 121
+[26-Jul-2023 00:44:16 UTC] PHP Fatal error:  Cannot redeclare App\Models\User::$casts in /home/phoenixt/api.initium.tarjetajovendiamante.com/app/Models/User.php on line 124
+[26-Jul-2023 00:44:18 UTC] PHP Fatal error:  Cannot redeclare App\Models\User::$casts in /home/phoenixt/api.initium.tarjetajovendiamante.com/app/Models/User.php on line 124
+[26-Jul-2023 00:44:31 UTC] PHP Fatal error:  Cannot redeclare App\Models\User::$casts in /home/phoenixt/api.initium.tarjetajovendiamante.com/app/Models/User.php on line 124
+[26-Jul-2023 00:44:34 UTC] PHP Fatal error:  Cannot redeclare App\Models\User::$casts in /home/phoenixt/api.initium.tarjetajovendiamante.com/app/Models/User.php on line 124
+[26-Jul-2023 00:44:41 UTC] PHP Fatal error:  Cannot redeclare App\Models\User::$casts in /home/phoenixt/api.initium.tarjetajovendiamante.com/app/Models/User.php on line 124

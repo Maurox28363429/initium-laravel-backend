@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class planes_curso extends Model
 {
-    use HasFactory
+    use HasFactory;
     protected $fillable=[
         "img",
         "precio",
