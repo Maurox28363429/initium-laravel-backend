@@ -1,0 +1,53 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\maparelaciones as Models;
+use Illuminate\Support\Facades\DB;
+use App\Http\Traits\HelpersTrait;
+class MaparelacionesController extends Controller
+{
+use HelpersTrait;
+    public function index(Request $request){
+        $query=Models::query();
+        $page=$request->input('page') ?? null;
+        $user_id=$request->input('user_id') ?? null;
+        if($user_id){
+            return $query->where('user_id',$user_id)->first();
+        }
+        if(isset($page)){
+            return $this->HelpPaginate(
+                $query
+            );
+        }else{
+            return $query->select(['id','name'])->get();
+        }
+    }//index
+    public function show($id,Request $request){
+        $includes=$request->input('includes') ?? [];
+        return $this->HelpShow(
+            Models::where("id",$id)->limit(1)->with($includes),
+            $request->all()
+        );
+    }
+    public function store(Request $request){
+        
+        return $this->HelpStore(
+            Models::query(),
+            $request->all()
+        );
+    }
+    public function update($id,Request $request){
+        return $this->HelpUpdate(
+            Models::where("id",$id)->limit(1),
+            $request->all()
+        );
+    }
+    public function delete($id,Request $request){
+        return $this->HelpDelete(
+            Models::where("id",$id)->limit(1),
+            $request->all()
+        );
+    }
+}

@@ -14,7 +14,8 @@ use App\Models\{
     form_seg,
     Cursos,
     Clientes,
-    User
+    User,
+    golobjetivos
 };
 class User extends Authenticatable implements JWTSubject
 {
@@ -38,12 +39,6 @@ class User extends Authenticatable implements JWTSubject
         'img',
         "reglas"
     ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
@@ -53,7 +48,9 @@ class User extends Authenticatable implements JWTSubject
         'form_gol',
         'form_eci',
         'form_seg',
-        'curso_type'
+        'curso_type',
+        "curso",
+        "golobjetivos"
     ];
     public function getFormResolveAttribute()
     {
@@ -119,6 +116,20 @@ class User extends Authenticatable implements JWTSubject
         }
         return null;
     }
+    public function getCursoAttribute()
+    {
+        
+        $curso_id=Clientes::where('user_id',$this->attributes['id'])->first()->curso_id ?? null;
+        if(!$curso_id){
+            return null;
+        }
+        $curso=Cursos::where('id',$curso_id)->limit(1)->select([
+            'id',
+            'name',
+            "gol_active"
+        ])->first();
+        return $curso;
+    }
     /**
      * The attributes that should be cast.
      *
@@ -126,6 +137,7 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'active' => 'integer'
     ];
 
     public function getJWTIdentifier()
@@ -145,7 +157,15 @@ class User extends Authenticatable implements JWTSubject
         if($value==null || $value==''){
             return "https://placehold.co/600x400/png";
         }else{
-            return url('images/' . $this->attributes['img']);
+            return $this->attributes['img'];
+        }
+    }
+    public function getGolobjetivosAttribute(){
+        $gol=golobjetivos::where('user_id',$this->attributes['id'])->first();
+        if($gol){
+            return $gol;
+        }else{
+            return null;
         }
     }
 }

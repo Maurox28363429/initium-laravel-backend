@@ -33,7 +33,8 @@ class Clientes extends Model
         "soft_delete",
         "reference_person",
         "user_id",
-        "curso_id"
+        "curso_id",
+        "ciudad"
     ];
     protected $appends = [
         'pagado_pendiente',

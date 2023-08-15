@@ -16,7 +16,7 @@ namespace App\Http\Controllers;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Hash;
     use Illuminate\Support\Facades\Validator;
-    use JWTAuth;
+    use Tymon\JWTAuth\Facades\JWTAuth;
     use Tymon\JWTAuth\Exceptions\JWTException;
     use Illuminate\Support\Facades\DB;
     use App\Http\Traits\HelpersTrait;
@@ -25,10 +25,37 @@ namespace App\Http\Controllers;
 
     use App\Imports\GolInUserImport;
     use Maatwebsite\Excel\Facades\Excel;
+    use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
     use HelpersTrait;
+    public function refresh()
+    {
+        $token = JWTAuth::getToken();
+
+        if (!$token) {
+            return response()->json(['error' => 'Token no proporcionado'], 401);
+        }
+
+        try {
+            $refreshedToken = JWTAuth::refresh($token);
+        } catch (TokenInvalidException $e) {
+            return response()->json(['error' => 'Token inv«¡lido'], 401);
+        }
+
+        return $this->respondWithToken($refreshedToken);
+    }
+
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => JWTAuth::factory()->getTTL() * 3600,
+        ]);
+    }
     public function import_gol(Request $request){
         $file=$request->file('excel');
         Excel::import(new GolInUserImport, $file);
@@ -134,9 +161,8 @@ class UserController extends Controller
     }
     public function update($id,Request $request){
         try {
-
             DB::beginTransaction();
-                $data=$request->all();
+                $data=$request->except(['img']);
                 $user=User::find($id);
                 if(!$user){
                     return response()->json(['error'=>'usuario no encontrado'], 400);
@@ -146,22 +172,23 @@ class UserController extends Controller
                         'user_id' => $user->id
                     ]);
                 }
-                if( isset($data['password']) && $data['password']!='' && $data['password']!=null ){
+                if( isset($data['password']) && $data['password'] != null && $data['password'] != ""){
                     $data["password"]=bcrypt($data["password"]);
+                }else{
+                    unset($data['password']);
                 }
-                
-                $pruebaimg=$request->input('img') ?? null;
-
-                if ($request->hasFile('img') && $pruebaimg!=null) {
-                    $file = $request->file('img');
-                    $name = time() . $file->getClientOriginalName();
-                    $file->move(public_path() . '/images/', $name);
-                    $data['img'] = $name;
-                }
-                $user->update($data);
+            $validateImg=$request->file('img') ?? null;
+            if ($request->hasFile('img') &&  $validateImg != null) {                
+                $date = Carbon::now();
+                $text = $date->format('Y_m_d');
+                $image = $request->file('img');
+                $path = $image->store('public/images/users/' . $text . "/");
+                $data["img"] = env('APP_URL') . Storage::url($path);
+            }
+            $user_update=User::where('id',$id)->limit(1)->update($data);
             DB::commit();
             return response()->json([
-                "data"=>$user
+                "data"=>$data
             ],200);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -265,14 +292,16 @@ class UserController extends Controller
                 if($validator->fails()){
                     return response()->json($validator->errors()->toJson(), 400);
                 }
-                $data=$request->all();
+               $data=$request->except(['img']);
                 $data["password"]=bcrypt($data["password"] ?? "12345");
 
-                if ($request->hasFile('img')) {
-                    $file = $request->file('img');
-                    $name = time() . $file->getClientOriginalName();
-                    $file->move(public_path() . '/images/', $name);
-                    $data['img'] = $name;
+                $validateImg=$request->input('img') ?? null;
+                if ($request->hasFile('img') &&  $validateImg != null) {
+                    $date = Carbon::now();
+                    $text = $date->format('Y_m_d');
+                    $image = $request->file('img');
+                    $path = $image->store('public/images/users/' . $text . "/");
+                    $data["img"] = env('APP_URL') . Storage::url($path);
                 }
                 $user = User::create($data);
                 $token = JWTAuth::fromUser($user);
@@ -299,7 +328,7 @@ class UserController extends Controller
                             $validator->errors()->toJson()
                         ), 400);
                 }
-                $data=$request->except(['price','nombre_paquete']) ?? [];
+                $data=$request->except(['price','nombre_paquete','img']) ?? [];
                 // $sic='SIC';
                 // $last_curso=Cursos::query()
                 //     ->orderBy('id','desc')
@@ -354,7 +383,6 @@ class UserController extends Controller
                     $file->move(public_path() . '/images/pagos/', $name);
                     $order['img_url'] = $name;
                 }
-                
                 Order::create($order);
                 /*
                 $order=Order::create([

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class planes_curso extends Model
 {
     use HasFactory;
-    protected $fillable=[
+    protected $fillable = [
         "img",
         "precio",
         "nombre",
@@ -16,17 +16,30 @@ class planes_curso extends Model
         "descripcion",
         "link"
     ];
-    public function getCreatedAtAttribute(){
-        $date=explode(" ", $this->attributes['created_at']);
-        $fecha=$date[0];
-        $time=$date[1];
-        $fecha=explode("-",$fecha);
-        return $fecha=$fecha["2"]."/".$fecha["1"]."/".$fecha["0"];
+    protected $casts = [
+        'calificacion' => 'integer',
+    ];
+    public function getCreatedAtAttribute()
+    {
+        $date = explode(" ", $this->attributes['created_at']);
+        $fecha = $date[0];
+        $time = $date[1];
+        $fecha = explode("-", $fecha);
+        return $fecha = $fecha["2"] . "/" . $fecha["1"] . "/" . $fecha["0"];
     }
-    public function getImgAttribute(){
-        if($this->attributes['img']){
+    public function getLinkAttribute()
+    {
+        if ($this->attributes['link'] != null) {
+            return $this->attributes['link'];
+        } else {
+            return null;
+        }
+    }
+    public function getImgAttribute()
+    {
+        if ($this->attributes['img']) {
             return url('images/' . $this->attributes['img']);
-        }else{
+        } else {
             return url('images/' . 'default.png');
         }
     }
