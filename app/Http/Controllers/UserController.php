@@ -31,21 +31,12 @@ use Illuminate\Support\Facades\Storage;
 class UserController extends Controller
 {
     use HelpersTrait;
-    public function refresh()
-    {
-        $token = JWTAuth::getToken();
-
-        if (!$token) {
-            return response()->json(['error' => 'Token no proporcionado'], 401);
-        }
-
-        try {
-            $refreshedToken = JWTAuth::refresh($token);
-        } catch (TokenInvalidException $e) {
-            return response()->json(['error' => 'Token inv«¡lido'], 401);
-        }
-
-        return $this->respondWithToken($refreshedToken);
+    public function refresh(Request $request)
+    {   
+        $email = $request->input('email') ?? null;
+        $user = User::where('email',$email)->first();
+        $token = JWTAuth::fromUser($user);
+        return $this->respondWithToken($token);
     }
 
     protected function respondWithToken($token)
