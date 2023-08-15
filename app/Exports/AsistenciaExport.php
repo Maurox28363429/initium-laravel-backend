@@ -10,6 +10,7 @@ use App\Models\{
     forminduccion,
     Cursos
 };
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -61,9 +62,9 @@ class AsistenciaExport implements FromCollection,WithHeadings,ShouldAutoSize
         $response=$data->map(function($client)use($curso_id,$curso_name_parse){    
         switch ($curso_name_parse) {
             case 'SIC':
-            $form_data=form_seg::query()
-                ->where('user_id',$client->user_id)
-                ->first();
+
+            $form_data=form_seg::query()->where('user_id',$client->user_id)->first();
+            $user_data=User::query()->where('id','user_id')->first();
             return [
                 "ID"=>$client->id,
                 "Nombre"=>$client->name." ".$client->last_name,
@@ -119,9 +120,8 @@ class AsistenciaExport implements FromCollection,WithHeadings,ShouldAutoSize
 
             case 'GOL':
 
-            $form_data=forminduccion::query()
-                ->where('user_id',$client->user_id)
-                ->first();
+            $form_data=forminduccion::query()->where('user_id',$client->user_id)->first();
+            $user_data=User::query()->where('id','user_id')->first();
             return [
                 "ID"=>$client->id,
                 "Nombre"=>$client->name." ".$client->last_name,

@@ -146,11 +146,13 @@ class UserController extends Controller
                         'user_id' => $user->id
                     ]);
                 }
-                if( isset($data['password']) ){
+                if( isset($data['password']) && $data['password']!='' && $data['password']!=null ){
                     $data["password"]=bcrypt($data["password"]);
                 }
                 
-                if ($request->hasFile('img')) {
+                $pruebaimg=$request->input('img') ?? null;
+
+                if ($request->hasFile('img') && $pruebaimg!=null) {
                     $file = $request->file('img');
                     $name = time() . $file->getClientOriginalName();
                     $file->move(public_path() . '/images/', $name);

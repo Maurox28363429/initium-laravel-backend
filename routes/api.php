@@ -112,10 +112,11 @@ Route::put('llego/{id}', 'App\Http\Controllers\DiasCursoClienteController@update
 Route::delete('llego/{id}', 'App\Http\Controllers\DiasCursoClienteController@delete');
 
 //ForminduccionController CRUD GOL
-Route::get('forminduccion', 'App\Http\Controllers\FormEciController@index');
-Route::get('forminduccion/{id}', 'App\Http\Controllers\FormEciController@show');
-Route::post('forminduccion', 'App\Http\Controllers\FormEciController@store');
-Route::put('forminduccion/{id}', 'App\Http\Controllers\FormEciController@update');
+
+Route::get('forminduccion', 'App\Http\Controllers\ForminduccionController@index');
+Route::get('forminduccion/{id}', 'App\Http\Controllers\ForminduccionController@show');
+Route::post('forminduccion', 'App\Http\Controllers\ForminduccionController@store');
+Route::put('forminduccion/{id}', 'App\Http\Controllers\ForminduccionController@update');
 Route::delete('forminduccion/{id}', 'App\Http\Controllers\FormEciController@delete');
 //ForminduccionController CRUD
 Route::get('form_eci', 'App\Http\Controllers\FormEciController@index');
@@ -251,7 +252,7 @@ Route::get("horario",function(Request $request ){
                         "id"=> 10,
                         "title"=> 'Acreditación',
                         "day"=> 'Viernes',
-                        "start"=> '6:00 pm',
+                        "start"=> '6:00 pm - 6:59 pm',
                         "end"=> '6:59 pm'
                     ],
                     [
@@ -545,13 +546,13 @@ Route::get("reglas",function(Request $request ){
                 "id"=> 29,
                 "number"=> 9,
                 "description"=>
-                "No realice ningún tipo de violencia física, hacia usted mismo, ni contra ninguna otra persona, tampoco hacia elementos de propiedad."
+                "No comience ningún tipo de relación sexual nueva con ningún participante por un período mínimo de 30 (treinta) días después de completar GOL."
             ],
             [
                 "id"=> 30,
                 "number"=> 10,
                 "description"=>
-                "No inicien ningún tipo de relación sexual nueva con ningún participante por un período mínimo de 30 (treinta) días después de completar GOL."
+                "No realice ningún tipo de violencia física, hacia usted mismo, ni contra ninguna otra persona, tampoco hacia elementos de propiedad."
             ],
         ];
 

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class forminduccion extends Model
 {
     use HasFactory;
+    protected $table = 'forminduccions';
     protected $fillable=[
         "user_id",
         "question_1",

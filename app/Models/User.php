@@ -101,7 +101,7 @@ class User extends Authenticatable implements JWTSubject
         
         $curso_id=Clientes::where('user_id',$this->attributes['id'])->first()->curso_id ?? null;
         if(!$curso_id){
-            return 'No definido';
+            return null;
         }
         $curso=Cursos::where('id',$curso_id)->limit(1)->first();
         if(!$curso){
@@ -141,6 +141,7 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
     public function getImgAttribute($value){
+        return "https://placehold.co/600x400/png";
         if($value==null || $value==''){
             return "https://placehold.co/600x400/png";
         }else{
