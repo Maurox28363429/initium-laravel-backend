@@ -14,7 +14,8 @@ use App\Models\{
     form_seg,
     Cursos,
     Clientes,
-    User
+    User,
+    golobjetivos
 };
 class User extends Authenticatable implements JWTSubject
 {
@@ -48,7 +49,8 @@ class User extends Authenticatable implements JWTSubject
         'form_eci',
         'form_seg',
         'curso_type',
-        "curso"
+        "curso",
+        "golobjetivos"
     ];
     public function getFormResolveAttribute()
     {
@@ -154,7 +156,15 @@ class User extends Authenticatable implements JWTSubject
         if($value==null || $value==''){
             return "https://placehold.co/600x400/png";
         }else{
-            return url('images/' . $this->attributes['img']);
+            return $this->attributes['img'];
+        }
+    }
+    public function getGolobjetivosAttribute(){
+        $gol=golobjetivos::where('user_id',$this->attributes['id'])->first();
+        if($gol){
+            return $gol;
+        }else{
+            return null;
         }
     }
 }

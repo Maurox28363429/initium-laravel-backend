@@ -7,12 +7,22 @@ use App\Models\{
     cursovotaciones as Models
 };
 use App\Http\Traits\HelpersTrait;
+
 class CursovotacionesController extends Controller
 {
     use HelpersTrait;
     public function index(Request $request)
     {
         $query = Models::query();
+        $search = $request->input('search') ?? '';
+        $curso_id = $request->input('curso_id') ?? '';
+        if ($search != '') {
+            $query->where('nombre', 'like', '%' . $search . '%');
+            $query->orWhere('descripcion', 'like', '%' . $search . '%');
+        }
+        if ($curso_id != '') {
+            $query->where('curso_id', $curso_id);
+        }
         return $this->HelpPaginate(
             $query
         );

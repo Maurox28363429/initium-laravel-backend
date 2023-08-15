@@ -11,7 +11,8 @@ class maparelaciones extends Model
     protected $fillable=[
         "user_id",
         "descripcion",
-        "name"   
+        "name",
+        "parentesco"
     ];
     public function user()
     {

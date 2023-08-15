@@ -8,12 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class cursovotos extends Model
 {
     use HasFactory;
-    protected $fillable=[
+    protected $fillable = [
         "user_id",
         "votacion_id",
         "seleccion_1",
         "seleccion_2",
-        "seleccion_3"   
+        "seleccion_3"
+    ];
+    protected $appends = [
+        "resultados"
     ];
     public function votacion()
     {
@@ -23,4 +26,22 @@ class cursovotos extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function getResultadosAttribute()
+    {
+        $resultados = [];
+        if($this->seleccion_1!=null)
+        {
+            $resultados[] = $this->seleccion_1;
+        }
+        if($this->seleccion_2!=null)
+        {
+            $resultados[] = $this->seleccion_2;
+        }
+        if($this->seleccion_3!=null)
+        {
+            $resultados[] = $this->seleccion_3;
+        }
+        return $resultados;
+    }
+
 }

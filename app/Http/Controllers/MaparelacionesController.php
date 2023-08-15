@@ -12,6 +12,10 @@ use HelpersTrait;
     public function index(Request $request){
         $query=Models::query();
         $page=$request->input('page') ?? null;
+        $user_id=$request->input('user_id') ?? null;
+        if($user_id){
+            return $query->where('user_id',$user_id)->first();
+        }
         if(isset($page)){
             return $this->HelpPaginate(
                 $query
