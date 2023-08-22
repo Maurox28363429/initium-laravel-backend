@@ -101,23 +101,25 @@ class ClientesController extends Controller
         }
     } //pase_de_estudiantes
     public function participantes(Request $request)
-    {
-        
-        //$user = JWTAuth::parseToken()->authenticate();
+    {   
+        $user = JWTAuth::parseToken()->authenticate();
         $includes = $request->input('includes') ?? ['user'];
         $query = Models::query()->with($includes);
         $query->where('curso_id', $request->input('curso_id'));
+        $search= $request->input('search') ?? null;
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
         $query->select([
             "id",
             "name",
-            "last_name",
             "email",
             "phone",
             "pais",
             "user_id"
         ])->orderBy('name', 'asc');
-        
-        //$query->where('user_id','!=', $user->id);
+
+        $query->where('user_id', '!=', $user->id);
         $datos = $query->paginate(15);
         return [
             "data" => $datos->items(),

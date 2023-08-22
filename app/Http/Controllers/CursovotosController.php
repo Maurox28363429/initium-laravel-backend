@@ -10,7 +10,8 @@ use App\Models\{
 };
 use App\Http\Traits\HelpersTrait;
 use Illuminate\Support\Facades\DB;
-
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 class CursovotosController extends Controller
 {
     use HelpersTrait;

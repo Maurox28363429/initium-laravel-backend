@@ -28,7 +28,7 @@ class cursovotaciones extends Model
             case "Cerrada":
                 return "Cerrada";
                 break;
-            case "Cancelado":
+            case "Cancelada":
                 return "Cancelada";
                 break;
             default:
