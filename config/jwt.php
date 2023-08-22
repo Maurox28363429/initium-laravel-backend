@@ -101,7 +101,7 @@ return [
     |
     */
 
-    'ttl' => env('JWT_TTL', 4890),
+    'ttl' => env('JWT_TTL', 60000),
     //'ttl'=>null,
 
     /*

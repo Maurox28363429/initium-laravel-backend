@@ -29,6 +29,8 @@ Route::get('auth', 'App\Http\Controllers\UserController@getAuthenticatedUser');
 Route::post('getRecovery', 'App\Http\Controllers\UserController@getRecovery');
 Route::post('validateRecovery', 'App\Http\Controllers\UserController@validateRecovery');
 Route::post('putRecovery', 'App\Http\Controllers\UserController@putRecovery');
+
+
 //user
 Route::get('users', 'App\Http\Controllers\UserController@index');
 Route::get('user/{id}', 'App\Http\Controllers\UserController@show');
@@ -47,6 +49,12 @@ Route::get('maparelaciones/{id}', 'App\Http\Controllers\MaparelacionesController
 Route::post('maparelaciones', 'App\Http\Controllers\MaparelacionesController@store');
 Route::put('maparelaciones/{id}', 'App\Http\Controllers\MaparelacionesController@update');
 Route::delete('maparelaciones/{id}', 'App\Http\Controllers\MaparelacionesController@delete');
+//Jugadas de enrolamiento CRUD
+Route::get('jugadas_enrolamiento', 'App\Http\Controllers\JugadasEnrrolamientoController@index');
+Route::get('jugadas_enrolamiento/{id}', 'App\Http\Controllers\JugadasEnrrolamientoController@show');
+Route::post('jugadas_enrolamiento', 'App\Http\Controllers\JugadasEnrrolamientoController@store');
+Route::put('jugadas_enrolamiento/{id}', 'App\Http\Controllers\JugadasEnrrolamientoController@update');
+Route::delete('jugadas_enrolamiento/{id}', 'App\Http\Controllers\JugadasEnrrolamientoController@delete');
 //Cursos CRUD
 Route::get('cursos', 'App\Http\Controllers\CursosController@index');
 Route::get('curso/{id}', 'App\Http\Controllers\CursosController@show');
@@ -279,11 +287,11 @@ Route::get("horario", function (Request $request) {
                 "titulo" => "Primer fin de semana",
                 "data" => [
                     [
-                        "id"=> 10,
-                        "title"=> 'Acreditación',
-                        "day"=> 'Viernes',
-                        "start"=> '6:00 pm - 6:59 pm',
-                        "end"=> '6:59 pm'
+                        "id" => 10,
+                        "title" => 'Acreditación',
+                        "day" => 'Viernes',
+                        "start" => '6:00 pm - 6:59 pm',
+                        "end" => '6:59 pm'
                     ],
                     [
                         "id" => 11,
@@ -573,17 +581,17 @@ Route::get("reglas", function (Request $request) {
                 "Teléfonos celulares y dispositivos electrónicos similares deberán permanecer apagados durante las sesiones de entrenamiento."
             ],
             [
-                "id"=> 29,
-                "number"=> 9,
-                "description"=>
+                "id" => 29,
+                "number" => 9,
+                "description" =>
                 "No comience ningún tipo de relación sexual nueva con ningún participante por un período mínimo de 30 (treinta) días después de completar GOL."
             ],
             [
-                "id"=> 30,
-                "number"=> 10,
-                "description"=>
+                "id" => 30,
+                "number" => 10,
+                "description" =>
                 "No realice ningún tipo de violencia física, hacia usted mismo, ni contra ninguna otra persona, tampoco hacia elementos de propiedad."
-	     ]
+            ]
         ];
 
         $data = [];

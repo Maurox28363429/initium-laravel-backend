@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Traits\HelpersTrait;
 use App\Models\{
-    maparelaciones as Models,
+    jugadasEnrrolamiento as Models,
     Clientes,
     User
 };
-use Illuminate\Support\Facades\DB;
-use App\Http\Traits\HelpersTrait;
-class MaparelacionesController extends Controller
+class JugadasEnrrolamientoController extends Controller
 {
     use HelpersTrait;
     public function index(Request $request){

@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class maparelaciones extends Model
+class jugadasEnrrolamiento extends Model
 {
     use HasFactory;
     protected $fillable=[
         "user_id",
-        "descripcion",
         "name",
+        "descripcion",
         "parentesco",
-        'curso_id'
+        "curso_id"
     ];
     public function user()
     {
