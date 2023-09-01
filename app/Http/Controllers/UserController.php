@@ -255,7 +255,7 @@ class UserController extends Controller
             return response()->json(['error' => 'No se pudo iniciar'], 500);
         }
         $user = User::where('email', $request->input('email'))->limit(2)->first();
-        if ($user->role_id != 1) {
+        if ($user->role_id != 1 && $user->role_id != 9) {
             return response()->json(['error' => 'No se pudo iniciar, el usuario no es admin'], 500);
         }
         if ($user->active == 0) {
@@ -264,6 +264,12 @@ class UserController extends Controller
                 'error' => "El usuario no esta autorizado"
             ], 500);
         }
+        if($user->role_id == 9){
+            $user->coordinador=true;
+        }
+        //normalizar error en frontend
+        $user->role_id=1;
+
         return response()->json(compact('token', 'user'));
     }
     public function authenticate_participante(Request $request)
