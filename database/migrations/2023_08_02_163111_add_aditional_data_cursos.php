@@ -14,8 +14,8 @@ class AddAditionalDataCursos extends Migration
     public function up()
     {
         Schema::table('cursos', function (Blueprint $table) {
-            $table->integer('num_declaracion')->unsigned();
-            $table->integer('num_cumplimiento_declaracion')->unsigned();
+            $table->integer('num_declaracion')->unsigned()->nullable();
+            $table->integer('num_cumplimiento_declaracion')->unsigned()->nullable();
             $table->text('cancion_gol')->nullable();
             $table->text('mision_gol')->nullable();
             $table->boolean('gol_active')->default(false);
