@@ -185,7 +185,7 @@ class UserController extends Controller
                     'user_id' => $user->id
                 ]);
             }
-            if (isset($data['password']) && $data['password'] != null && $data['password'] != "") {
+            if (isset($data['password']) && $data['password'] != null && $data['password'] != "" && $data['password'] != "null") {
                 $data["password"] = bcrypt($data["password"]);
             } else {
                 unset($data['password']);

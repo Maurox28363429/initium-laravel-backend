@@ -16,8 +16,21 @@ class GolobjetivosController extends Controller
     use HelpersTrait;
     public function index(Request $request)
     {
-        $query = Models::query();
+        $query = Models::query()->with(['user']);
         $user_id = $request->input('user_id') ?? null;
+        $aprobado = $request->input('aprobado') ?? null;
+        $no_aprobado = $request->input('no_aprobado') ?? null;
+        /*
+            approvedOne
+            approvedTwo
+            approvedThree
+        */
+        if($aprobado){
+            $query->orderBy('approved', 'desc');
+        }
+        if($no_aprobado){
+            $query->orderBy('approved', 'asc');
+        }
         if ($user_id) {
             return $query->where('user_id', $user_id)->first();
         }
@@ -56,6 +69,14 @@ class GolobjetivosController extends Controller
         // if ($user->role_id == 7 && isset($data['comment'])) {
         //     return response()->json(['error' => 'No tienes permisos para comentar'], 401);
         // }
+        /*
+            approvedOne
+            approvedTwo
+            approvedThree
+        */
+        if($data['approvedOne'] && $data['approvedTwo'] && $data['approvedThree']){
+            $data['approved']=true;
+        }
         return $this->HelpStore(
             Models::query(),
             $data
@@ -71,6 +92,9 @@ class GolobjetivosController extends Controller
         // if ($user->role_id == 7 && isset($data['comment'])) {
         //     return response()->json(['error' => 'No tienes permisos para comentar'], 401);
         // }
+        if ($data['approvedOne'] && $data['approvedTwo'] && $data['approvedThree']) {
+            $data['approved'] = true;
+        }
         return $this->HelpUpdate(
             Models::where("id", $id)->limit(1),
             $data

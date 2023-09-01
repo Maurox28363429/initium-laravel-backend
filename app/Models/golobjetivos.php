@@ -30,7 +30,10 @@ class golobjetivos extends Model
         "howToCelebrateThree",
         "percentageThree",
         "approvedThree",
-        "comment"
+        "comment",
+        "comment2",
+        "comment3",
+        "approved"
     ];
     protected $appends = ['aprovedAll'];
     protected $casts = [
