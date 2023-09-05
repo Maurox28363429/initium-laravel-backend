@@ -324,7 +324,14 @@ class ClientesController extends Controller
             $data["password"] = bcrypt($data["password"] ?? "12345");
             $client_search = Models::where('user_id', $data['user_id'])->first();
             $user = User::find($data['user_id']);
-            
+            $validateImg = $request->input('dni_file') ?? null;
+            if ($request->hasFile('dni_file') &&  $validateImg != null) {
+                $date = Carbon::now();
+                $text = $date->format('Y_m_d');
+                $image = $request->file('dni_file');
+                $path = $image->store('public/images/dni_file/' . $text . "/");
+                $data["dni_file"] = env('APP_URL') . Storage::url($path);
+            }
             if ($client_search) {
                 $data_client = $request->except([
                     'parentesco'
