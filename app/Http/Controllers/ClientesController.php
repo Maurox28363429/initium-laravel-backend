@@ -12,7 +12,8 @@ use App\Models\{
     historial_curso_client,
     Payments,
     asistencia_curso,
-    cursovotos
+    cursovotos,
+    golobjetivos
 };
 use App\Http\Traits\HelpersTrait;
 use App\Imports\{
@@ -101,11 +102,41 @@ class ClientesController extends Controller
         }
     } //pase_de_estudiantes
     public function participantes(Request $request)
-    {   
-        $user = JWTAuth::parseToken()->authenticate();
+    {
+
         $includes = $request->input('includes') ?? ['user'];
         $query = Models::query()->with($includes);
-        $query->where('curso_id', $request->input('curso_id'));
+        $user = JWTAuth::parseToken()->authenticate();
+        $query->where('user_id', '!=', $user->id);
+        $objetivos_approved = $request->input('objetivos_approved') ?? null;
+        if($objetivos_approved){
+           $golobejtivos_user_ids = golobjetivos::query()
+           ->where('curso_id',$request->input('curso_id'))
+           ->where(function ($query) {
+                    $query->where('approvedOne', true);
+                    $query->where('approvedTwo', true);
+                    $query->where('approvedThree', true);
+                    
+            })
+           ->pluck('user_id');
+          $query->whereIn('user_id',$golobejtivos_user_ids);
+        }
+        $objetivos_no_approved = $request->input('objetivos_no_approved') ?? null;
+        if($objetivos_no_approved){
+            $golobejtivos_user_ids = golobjetivos::query()
+                ->where('curso_id', $request->input('curso_id'))
+                ->where(function ($query) {
+                    $query->where('approvedOne', false)
+                    ->orWhere('approvedTwo', false)
+                    ->orWhere('approvedThree', false);
+                })
+                ->pluck('user_id');
+            $query->whereIn('user_id', $golobejtivos_user_ids);
+        }
+        $curso_id = $request->input('curso_id') ?? null;
+        if ($curso_id) {
+            $query->where('curso_id', $curso_id);
+        }
         $search= $request->input('search') ?? null;
         if ($search) {
             $query->where('name', 'like', '%' . $search . '%');
@@ -118,8 +149,6 @@ class ClientesController extends Controller
             "pais",
             "user_id"
         ])->orderBy('name', 'asc');
-
-        $query->where('user_id', '!=', $user->id);
         $datos = $query->paginate(15);
         return [
             "data" => $datos->items(),
