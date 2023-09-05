@@ -30,7 +30,8 @@ use App\Exports\{
     PromocionesExport
 };
 use PDF;
-
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 class ClientesController extends Controller
 {
     use HelpersTrait;
@@ -168,6 +169,10 @@ class ClientesController extends Controller
         $search = $request->input('search') ?? null;
         $curso_id = $request->input('curso_id') ?? null;
         $curso_status = $request->input('curso_status') ?? null;
+        $ciudad = $request->input('ciudad') ?? null;
+        if($ciudad && $ciudad!=''){
+            $query->where('ciudad',$ciudad);
+        }
         if ($search) {
             $query->WhereRaw("CONCAT(`name`, ' ', `last_name`) LIKE ?", ['%' . $search . '%'])->orWhere('email', 'like', '%' . $search . '%');
         }
@@ -319,7 +324,7 @@ class ClientesController extends Controller
             $data["password"] = bcrypt($data["password"] ?? "12345");
             $client_search = Models::where('user_id', $data['user_id'])->first();
             $user = User::find($data['user_id']);
-
+            
             if ($client_search) {
                 $data_client = $request->except([
                     'parentesco'

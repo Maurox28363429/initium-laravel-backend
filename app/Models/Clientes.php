@@ -34,7 +34,8 @@ class Clientes extends Model
         "reference_person",
         "user_id",
         "curso_id",
-        "ciudad"
+        "ciudad",
+        "dni_file"
     ];
     protected $appends = [
         'pagado_pendiente',
