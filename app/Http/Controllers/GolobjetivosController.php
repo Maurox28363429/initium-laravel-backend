@@ -92,7 +92,7 @@ class GolobjetivosController extends Controller
         // if ($user->role_id == 7 && isset($data['comment'])) {
         //     return response()->json(['error' => 'No tienes permisos para comentar'], 401);
         // }
-        if ($data['approvedOne'] && $data['approvedTwo'] && $data['approvedThree']) {
+        if (isset($data['approvedOne']) && isset($data['approvedTwo']) && isset($data['approvedThree'])) {
             $data['approved'] = true;
         }
         return $this->HelpUpdate(
