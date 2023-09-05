@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\golobjetivos;
 class golobjetivos extends Model
 {
     use HasFactory;
@@ -52,6 +52,9 @@ class golobjetivos extends Model
     public function getAprovedAllAttribute()
     {
         if ($this->approvedOne == 1 && $this->approvedTwo == 1 && $this->approvedThree == 1) {
+            // golobjetivos::where('id',$this->id)->update([
+            //     "approved"=>true
+            // ]);
             return true;
         } else {
             return false;

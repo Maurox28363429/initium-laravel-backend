@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\{Order,pases};
+use App\Models\{Order,pases, golobjetivos};
 class Clientes extends Model
 {
     use HasFactory;
@@ -39,7 +39,8 @@ class Clientes extends Model
     protected $appends = [
         'pagado_pendiente',
         'enrrolador',
-        'pase'
+        'pase',
+        'aprovedAll'
     ];
     public function orders(){
     	   return $this->hasMany(Order::class,'client_id')->orderBy('created_at', 'desc');
@@ -99,5 +100,11 @@ class Clientes extends Model
         $fecha=explode("-",$fecha);
         return $fecha=$fecha["2"]."/".$fecha["1"]."/".$fecha["0"];
     }
-	
+    public function getAprovedAllAttribute(){
+        $objetivos = golobjetivos::where('curso_id',$this->curso_id)->where('user_id',$this->user_id)->first();
+        if(!$objetivos){
+            return null;
+        }
+        return $objetivos->aprovedAll;
+    }
 }
