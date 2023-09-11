@@ -37,6 +37,12 @@ Route::get('user/{id}', 'App\Http\Controllers\UserController@show');
 Route::put('user/{id}', 'App\Http\Controllers\UserController@update');
 Route::post('user/{id}', 'App\Http\Controllers\UserController@update');
 Route::delete('user/{id}', 'App\Http\Controllers\UserController@delete');
+//historial golobjetivos
+Route::get('HistorialObjetivos', 'App\Http\Controllers\HistorialObjetivosController@index');
+Route::get('HistorialObjetivos/{id}', 'App\Http\Controllers\HistorialObjetivosController@show');
+Route::put('HistorialObjetivos/{id}', 'App\Http\Controllers\HistorialObjetivosController@update');
+Route::post('HistorialObjetivos/{id}', 'App\Http\Controllers\HistorialObjetivosController@update');
+Route::delete('HistorialObjetivos/{id}', 'App\Http\Controllers\HistorialObjetivosController@delete');
 //Etapas CRUD
 Route::get('etapas', 'App\Http\Controllers\EtapasController@index');
 Route::get('etapa/{id}', 'App\Http\Controllers\EtapasController@show');

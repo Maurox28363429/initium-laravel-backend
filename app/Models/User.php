@@ -37,7 +37,8 @@ class User extends Authenticatable implements JWTSubject
         'form_resolve',
         'gol',
         'img',
-        "reglas"
+        "reglas",
+        'curso_id'
     ];
     protected $hidden = [
         'password',

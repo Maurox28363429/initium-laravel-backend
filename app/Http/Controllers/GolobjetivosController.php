@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\{
     golobjetivos as Models,
-    User
+    User,
+    historial_objetivos
 };
 use App\Http\Traits\HelpersTrait;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Support\Facades\DB;
 
 class GolobjetivosController extends Controller
 {
@@ -84,6 +86,8 @@ class GolobjetivosController extends Controller
     }
     public function update($id, Request $request)
     {
+     try {
+        DB::beginTransaction();
         $data = $request->all();
         // $user = JWTAuth::parseToken()->authenticate();
         // if (!$user) {
@@ -95,10 +99,71 @@ class GolobjetivosController extends Controller
         if (isset($data['approvedOne']) && isset($data['approvedTwo']) && isset($data['approvedThree'])) {
             $data['approved'] = true;
         }
-        return $this->HelpUpdate(
-            Models::where("id", $id)->limit(1),
-            $data
-        );
+        $modelo=Models::where("id", $id)->limit(1);
+        $data['user_id']=$modelo->first()->user_id;
+        $data['curso_id']=$modelo->first()->curso_id;
+        
+            $process = $modelo->first();
+            if (!$process) {
+                throw new \Exception("No encontrado", 404);
+            }
+            /*
+                "objetiveOne",
+            "howToMeasureOne",
+            "whyOne",
+            "howToCelebrateOne",
+            "percentageOne",
+            "approvedOne",
+            "objetiveTwo",
+            "howToMeasureTwo",
+            "whyTwo",
+            "howToCelebrateTwo",
+            "percentageTwo",
+            "approvedTwo",
+            "objetiveThree",
+            "howToMeasureThree",
+            "whyThree",
+            "howToCelebrateThree",
+            "percentageThree",
+            "approvedThree",
+            "comment",
+            "comment2",
+            "comment3",
+            "approved",
+            */
+            if(
+                $process->objetiveOne != $data['objetiveOne'] ||
+                $process->howToMeasureOne != $data['howToMeasureOne'] ||
+                $process->whyOne != $data['whyOne'] ||
+                $process->howToCelebrateOne != $data['howToCelebrateOne'] ||
+                $process->percentageOne != $data['percentageOne'] ||
+                $process->approvedOne != $data['approvedOne'] ||
+                $process->objetiveTwo != $data['objetiveTwo'] ||
+                $process->howToMeasureTwo != $data['howToMeasureTwo'] ||
+                $process->whyTwo != $data['whyTwo'] ||
+                $process->howToCelebrateTwo != $data['howToCelebrateTwo'] ||
+                $process->percentageTwo != $data['percentageTwo'] ||
+                $process->approvedTwo != $data['approvedTwo'] ||
+                $process->objetiveThree != $data['objetiveThree'] ||
+                $process->howToMeasureThree != $data['howToMeasureThree'] ||
+                $process->whyThree != $data['whyThree'] ||
+                $process->howToCelebrateThree != $data['howToCelebrateThree'] ||
+                $process->percentageThree != $data['percentageThree'] ||
+                $process->approvedThree != $data['approvedThree'] 
+            ){
+                historial_objetivos::create($data);
+            }
+            $process->update($data);
+            DB::commit();
+            return [
+                "message" => "Datos Actualizados",
+                "status" => 200,
+                "data" => $process
+            ];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->HelpError($e);
+        }
     }
     public function delete($id, Request $request)
     {

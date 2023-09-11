@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\golobjetivos;
+use App\Observers\GolObjetivosObserver;
+use Illuminate\Database\Eloquent\Concerns\HasEvents;
 class golobjetivos extends Model
 {
     use HasFactory;
     protected $fillable = [
         "user_id",
-        //nuevo
         "curso_id",
         "objetiveOne",
         "howToMeasureOne",
@@ -59,5 +60,10 @@ class golobjetivos extends Model
         } else {
             return false;
         }
+    }
+    protected static function boot()
+    {
+        parent::boot();
+        self::observe(GolObjetivosObserver::class);
     }
 }
