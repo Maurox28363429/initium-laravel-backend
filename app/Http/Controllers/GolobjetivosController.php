@@ -76,7 +76,11 @@ class GolobjetivosController extends Controller
             approvedTwo
             approvedThree
         */
-        if($data['approvedOne'] && $data['approvedTwo'] && $data['approvedThree']){
+        if(
+            isset($data['approvedOne']) && 
+            isset($data['approvedTwo']) && 
+            isset($data['approvedThree'])
+        ){
             $data['approved']=true;
         }
         return $this->HelpStore(
