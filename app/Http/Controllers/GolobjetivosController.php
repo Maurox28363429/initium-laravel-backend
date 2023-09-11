@@ -62,7 +62,11 @@ class GolobjetivosController extends Controller
     }
     public function store(Request $request)
     {
-        $data = $request->all();
+        $data = $request->except([
+            'approvedOne',
+            'approvedTwo',
+            'approvedThree'
+        ]);
         // $user = JWTAuth::parseToken()->authenticate();
         
         // if (!$user) {
@@ -75,7 +79,7 @@ class GolobjetivosController extends Controller
             approvedOne
             approvedTwo
             approvedThree
-        */
+       
         if(
             isset($data['approvedOne']) && 
             isset($data['approvedTwo']) && 
@@ -83,6 +87,7 @@ class GolobjetivosController extends Controller
         ){
             $data['approved']=true;
         }
+         */
         return $this->HelpStore(
             Models::query(),
             $data
