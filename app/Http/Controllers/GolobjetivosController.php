@@ -66,6 +66,7 @@ class GolobjetivosController extends Controller
         $data['approvedThree']=false;
         $data['approvedTwo']=false;
         $data['approvedOne']=false;
+        $data['approved']=false;
         // $user = JWTAuth::parseToken()->authenticate();
         
         // if (!$user) {
