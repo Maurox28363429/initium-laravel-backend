@@ -62,11 +62,10 @@ class GolobjetivosController extends Controller
     }
     public function store(Request $request)
     {
-        $data = $request->except([
-            'approvedOne',
-            'approvedTwo',
-            'approvedThree'
-        ]);
+        $data = $request->all();
+        $data['approvedThree']=false;
+        $data['approvedTwo']=false;
+        $data['approvedOne']=false;
         // $user = JWTAuth::parseToken()->authenticate();
         
         // if (!$user) {
