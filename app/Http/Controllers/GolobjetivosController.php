@@ -92,6 +92,11 @@ class GolobjetivosController extends Controller
             Models::query(),
             $data
         );
+        return [
+            "message" => "Datos Actualizados",
+            "status" => 200,
+            "data" => $process
+        ];
     }
     public function update($id, Request $request)
     {
@@ -107,6 +112,14 @@ class GolobjetivosController extends Controller
         // }
         if (isset($data['approvedOne']) && isset($data['approvedTwo']) && isset($data['approvedThree'])) {
             $data['approved'] = true;
+        }else{
+            /* approvedOne
+            approvedTwo
+            approvedThree */
+            $data['approved'] = false;
+            $data['approvedOne'] = false;
+            $data['approvedTwo'] = false;
+            $data['approvedThree'] = false;
         }
         $modelo=Models::where("id", $id)->limit(1);
         $data['user_id']=$modelo->first()->user_id;
