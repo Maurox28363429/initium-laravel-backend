@@ -14,6 +14,7 @@ class HorariocoordinadorController extends Controller
         $page=$request->input('page') ?? null;
             return $this->HelpPaginate(
                 $query
+            );
     }//index
     public function show($id,Request $request){
         $includes=$request->input('includes') ?? [];
