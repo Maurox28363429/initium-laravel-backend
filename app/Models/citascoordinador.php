@@ -15,7 +15,7 @@ class citascoordinador extends Model
         'init_hora',
         'end_hora',
         'tipo',
-        'estado',
+        'estado', 
     ];
     public function participante()
     {

@@ -12,8 +12,25 @@ class CitascoordinadorController extends Controller
     public function index(Request $request){
         $query=Models::query();
         $page=$request->input('page') ?? null;
-            return $this->HelpPaginate(
-                $query
+        $participante_id = $request->input('participante_id') ?? null;
+        $coordinador_id = $request->input('coordinador_id') ?? null;
+        $fecha = $request->input('fecha') ?? null;
+        $estado = $request->input('estado') ?? null;
+        if($participante_id){
+            $query->where('participante_id',$participante_id);
+        }
+        if($coordinador_id){
+            $query->where('coordinador_id',$coordinador_id);
+        }
+        if($fecha){
+            $query->where('fecha',$fecha);
+        }
+        if($estado){
+            $query->where('estado',$estado);
+        }
+        return $this->HelpPaginate(
+            $query
+        );
     }//index
     public function show($id,Request $request){
         $includes=$request->input('includes') ?? [];
