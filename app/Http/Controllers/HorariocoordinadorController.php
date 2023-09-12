@@ -12,9 +12,17 @@ class HorariocoordinadorController extends Controller
     public function index(Request $request){
         $query=Models::query();
         $page=$request->input('page') ?? null;
-            return $this->HelpPaginate(
-                $query
-            );
+        $tipo=$request->input('tipo') ?? null;
+        $coordinador_id = $request->input('coordinador_id') ?? null;
+        if($tipo){
+            $query->where('tipo',$tipo);
+        }
+        if($coordinador_id){
+            $query->where('coordinador_id',$coordinador_id);
+        } 
+        return $this->HelpPaginate(
+            $query
+        );
     }//index
     public function show($id,Request $request){
         $includes=$request->input('includes') ?? [];
