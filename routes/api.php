@@ -174,6 +174,20 @@ Route::get('form_seg/{id}', 'App\Http\Controllers\FormSegController@show');
 Route::post('form_seg', 'App\Http\Controllers\FormSegController@store');
 Route::put('form_seg/{id}', 'App\Http\Controllers\FormSegController@update');
 Route::delete('form_seg/{id}', 'App\Http\Controllers\FormSegController@delete');
+//CitascoordinadorController
+Route::get('citascoordinador', 'App\Http\Controllers\CitascoordinadorController@index');
+Route::get('citascoordinador/{id}', 'App\Http\Controllers\CitascoordinadorController@show');
+Route::post('citascoordinador', 'App\Http\Controllers\CitascoordinadorController@store');
+Route::put('citascoordinador/{id}', 'App\Http\Controllers\CitascoordinadorController@update');
+Route::post('citascoordinador/{id}', 'App\Http\Controllers\CitascoordinadorController@update');
+Route::delete('citascoordinador/{id}', 'App\Http\Controllers\CitascoordinadorController@delete');
+//HorariocoordinadorController
+Route::get('horariocoordinador', 'App\Http\Controllers\HorariocoordinadorController@index');
+Route::get('horariocoordinador/{id}', 'App\Http\Controllers\HorariocoordinadorController@show');
+Route::post('horariocoordinador', 'App\Http\Controllers\HorariocoordinadorController@store');
+Route::put('horariocoordinador/{id}', 'App\Http\Controllers\HorariocoordinadorController@update');
+Route::post('horariocoordinador/{id}', 'App\Http\Controllers\HorariocoordinadorController@update');
+Route::delete('horariocoordinador/{id}', 'App\Http\Controllers\HorariocoordinadorController@delete');
 
 Route::group(['middleware' => ['jwt.verify']], function () {
     /*AÑADE AQUI LAS RUTAS QUE QUIERAS PROTEGER CON JWT*/

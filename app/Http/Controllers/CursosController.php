@@ -18,7 +18,12 @@ class CursosController extends Controller
         if ($search) {
             $query->where("name", "like", "%" . $search . "%");
         }
+        $selected = $request->input('selected') ?? null;
+        if ($selected) {
+            return $query->get();
+        }
         $active = $request->input('active') ?? null;
+        
         if ($active) {
             $query->orderBy("id", "desc");
                 // 	$query
