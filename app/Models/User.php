@@ -13,9 +13,9 @@ use App\Models\{
     form_eci,
     form_seg,
     Cursos,
-    Clientes,
-    User
+    Clientes
 };
+
 class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -28,15 +28,11 @@ class User extends Authenticatable implements JWTSubject
     protected $fillable = [
         'name',
         'email',
-        'last_name',
         'role_id',
         'password',
         'active',
-        "curso_actual_id",
-        'form_resolve',
-        'gol',
         'img',
-        "reglas"
+        'contrato'
     ];
 
     /**
@@ -47,78 +43,8 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password',
         'remember_token',
-        'recovery_cod'
     ];
-    protected $appends = [
-        'form_gol',
-        'form_eci',
-        'form_seg',
-        'curso_type'
-    ];
-    public function getFormResolveAttribute()
-    {
 
-        $form=Clientes::where('user_id',$this->attributes['id'])->where('Nickname','!=','')->count();
-        if($form!=0){
-            return true;
-        }else{
-            return false;
-        }
-    }
-    public function getCursoActualIdAttribute()
-    {
-        return Clientes::where('user_id',$this->attributes['id'])->first()->curso_id ?? null;
-    }
-    public function getFormGolAttribute()
-    {
-        $form=forminduccion::where('user_id',$this->attributes['id'])->count();
-        if($form!=0){
-            return true;
-        }else{
-            return false;
-        }
-    }
-    public function getFormEciAttribute()
-    {
-        $form=form_eci::where('user_id',$this->attributes['id'])->count();
-        if($form!=0){
-            return true;
-        }else{
-            return false;
-        }
-    }
-    public function getFormSegAttribute()
-    {
-        $form=form_seg::where('user_id',$this->attributes['id'])->count();
-        if($form!=0){
-            return true;
-        }else{
-            return false;
-        }
-    }
-    public function getCursoTypeAttribute()
-    {
-        
-        $curso_id=Clientes::where('user_id',$this->attributes['id'])->first()->curso_id ?? null;
-        if(!$curso_id){
-            return 'No definido';
-        }
-        $curso=Cursos::where('id',$curso_id)->limit(1)->first();
-        if(!$curso){
-            return 'Curso no encontrado';
-        }
-        $curso_name=strtolower($curso->name);
-        if(str_contains($curso_name, "sic")){
-            return 'SIC';
-        }
-        if(str_contains($curso_name, "eci")){
-            return 'ECI';
-        }
-        if(str_contains($curso_name, "gol")){
-            return 'GOL';
-        }
-        return null;
-    }
     /**
      * The attributes that should be cast.
      *
@@ -126,25 +52,57 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'role_id' => 'integer',
+        'departamento_id' => 'integer'
     ];
 
     public function getJWTIdentifier()
     {
         return $this->getKey();
     }
-    public function client()
-    {
-        return $this->belongsTo(Clientes::class,'id');
-    }
+
     public function getJWTCustomClaims()
     {
         return [];
     }
-    public function getImgAttribute($value){
-        if($value==null || $value==''){
+    public function getImgAttribute($value)
+    {
+        if ($value == null || $value == '') {
             return "https://placehold.co/600x400/png";
-        }else{
+        } else {
             return url('images/' . $this->attributes['img']);
         }
+    }
+    public function allPropiedades()
+    {
+        return $this->hasMany(Propiedades::class);
+    }
+    public function departamento()
+    {
+        return $this->belongsTo(departamentos::class);
+    }
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
+    public function votos()
+    {
+        return $this->hasMany(Voto::class);
+    }
+
+    public function reservationpayments()
+    {
+        return $this->hasMany(Reservationpayment::class);
     }
 }

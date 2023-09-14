@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->boolean('active')->default(false);
             $table->bigInteger('role_id')->nullable()->unsigned();
             $table->foreign('role_id')->references('id')->on('roles');
+            $table->text('img')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

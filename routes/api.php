@@ -17,555 +17,157 @@ use Maatwebsite\Excel\Row;
 
 //auth
 Route::post('register', 'App\Http\Controllers\UserController@register');
-
-Route::post('inscribir','App\Http\Controllers\UserController@inscribir');
-
 Route::post('login', 'App\Http\Controllers\UserController@authenticate');
-
-Route::post('login_participante', 'App\Http\Controllers\UserController@authenticate_participante');
-
 Route::get('auth', 'App\Http\Controllers\UserController@getAuthenticatedUser');
+Route::get('refreshtoken', 'App\Http\Controllers\UserController@refreshtoken');
 Route::post('getRecovery', 'App\Http\Controllers\UserController@getRecovery');
 Route::post('validateRecovery', 'App\Http\Controllers\UserController@validateRecovery');
 Route::post('putRecovery', 'App\Http\Controllers\UserController@putRecovery');
-//user
-Route::get('users', 'App\Http\Controllers\UserController@index');
-Route::get('user/{id}', 'App\Http\Controllers\UserController@show');
-Route::put('user/{id}', 'App\Http\Controllers\UserController@update');
-Route::post('user/{id}', 'App\Http\Controllers\UserController@update');
-Route::delete('user/{id}', 'App\Http\Controllers\UserController@delete');
-//Etapas CRUD
-Route::get('etapas', 'App\Http\Controllers\EtapasController@index');
-Route::get('etapa/{id}', 'App\Http\Controllers\EtapasController@show');
-Route::post('etapas', 'App\Http\Controllers\EtapasController@store');
-Route::put('etapa/{id}', 'App\Http\Controllers\EtapasController@update');
-Route::delete('etapa/{id}', 'App\Http\Controllers\EtapasController@delete');
-//Cursos CRUD
-Route::get('cursos', 'App\Http\Controllers\CursosController@index');
-Route::get('curso/{id}', 'App\Http\Controllers\CursosController@show');
-Route::post('curso', 'App\Http\Controllers\CursosController@store');
-Route::put('curso/{id}', 'App\Http\Controllers\CursosController@update');
-Route::delete('curso/{id}', 'App\Http\Controllers\CursosController@delete');
-//Clientes CRUD
-Route::get('clientes', 'App\Http\Controllers\ClientesController@index');
-Route::get('cliente/{id}', 'App\Http\Controllers\ClientesController@show');
-Route::get('cliente_by_user/{id}', 'App\Http\Controllers\ClientesController@show_by_user');
-Route::post('clientes', 'App\Http\Controllers\ClientesController@store');
-Route::post('clientes_public_form', 'App\Http\Controllers\ClientesController@clientes_public_form');
-Route::put('cliente/{id}', 'App\Http\Controllers\ClientesController@update');
-Route::delete('cliente/{id}', 'App\Http\Controllers\ClientesController@delete');
-Route::post('clientes/pase', "App\Http\Controllers\ClientesController@pase_de_estudiantes");
-Route::post('clientes_form', "App\Http\Controllers\ClientesController@register");
-Route::post('import_gol', 'App\Http\Controllers\ClientesController@import_gol');
-
-Route::get('clientes_excel_export', "App\Http\Controllers\ClientesController@clientes_excel_export");
-Route::get('asistencia_excel_export', "App\Http\Controllers\ClientesController@asistencia_excel_export");
-Route::get('promocion_excel_export', "App\Http\Controllers\ClientesController@promocion_excel_export");
-
-//Noti CRUD
-Route::get('notis', 'App\Http\Controllers\NotifyController@index');
-Route::get('noti/{id}', 'App\Http\Controllers\NotifyController@show');
-Route::post('notis', 'App\Http\Controllers\NotifyController@store');
-Route::put('noti/{id}', 'App\Http\Controllers\NotifyController@update');
-Route::delete('noti/{id}', 'App\Http\Controllers\NotifyController@delete');
-Route::get('planes_pago', 'App\Http\Controllers\PlanesCursoController@index');
-Route::get('planes_pago/{id}', 'App\Http\Controllers\PlanesCursoController@show');
-Route::post('planes_pago', 'App\Http\Controllers\PlanesCursoController@store');
-Route::post('planes_pago/{id}', 'App\Http\Controllers\PlanesCursoController@update');
-Route::delete('planes_pago/{id}', 'App\Http\Controllers\PlanesCursoController@delete');
-//Orders CRUD
-Route::get('admin-orders', 'App\Http\Controllers\OrderController@index');
-Route::get('admin-order/{id}', 'App\Http\Controllers\OrderController@show');
-Route::post('admin-orders', 'App\Http\Controllers\OrderController@store');
-Route::put('admin-order/{id}', 'App\Http\Controllers\OrderController@update');
-Route::delete('admin-order/{id}', 'App\Http\Controllers\OrderController@delete');
-//Pases CRUD
-Route::get('pases_list', 'App\Http\Controllers\PasesController@index');
-Route::get('pases_list/{id}', 'App\Http\Controllers\PasesController@show');
-Route::post('pases_list', 'App\Http\Controllers\PasesController@store');
-Route::put('pases_list/{id}', 'App\Http\Controllers\PasesController@update');
-Route::delete('pases_list/{id}', 'App\Http\Controllers\PasesController@delete');
-//Payment CRUD
-Route::get('payments', 'App\Http\Controllers\PaymentsController@index');
-Route::get('payment/{id}', 'App\Http\Controllers\PaymentsController@show');
-Route::post('payments', 'App\Http\Controllers\PaymentsController@store');
-Route::put('payment/{id}', 'App\Http\Controllers\PaymentsController@update');
-Route::delete('payment/{id}', 'App\Http\Controllers\PaymentsController@delete');
-//Roles
+//roles
 Route::get('roles', 'App\Http\Controllers\RolesController@index');
-Route::get('role/{id}', 'App\Http\Controllers\RolesController@show');
-Route::post('roles', 'App\Http\Controllers\RolesController@store');
-Route::put('role/{id}', 'App\Http\Controllers\RolesController@update');
-Route::delete('role/{id}', 'App\Http\Controllers\RolesController@delete');
-//Asistencia CRUD
-Route::get('assist', 'App\Http\Controllers\AsistenciaCursoController@index');
-Route::get('assist/{id}', 'App\Http\Controllers\AsistenciaCursoController@show');
-Route::post('assist', 'App\Http\Controllers\AsistenciaCursoController@store');
-Route::put('assist/{id}', 'App\Http\Controllers\AsistenciaCursoController@update');
-Route::delete('assist/{id}', 'App\Http\Controllers\AsistenciaCursoController@delete');
-Route::get('assist_export', 'App\Http\Controllers\ClientesController@export_asistencia');
-//Llego studiante CRUD
-Route::get('llego', 'App\Http\Controllers\DiasCursoClienteController@index');
-Route::get('llego/{id}', 'App\Http\Controllers\DiasCursoClienteController@show');
-Route::post('llego', 'App\Http\Controllers\DiasCursoClienteController@store');
-Route::put('llego/{id}', 'App\Http\Controllers\DiasCursoClienteController@update');
-Route::delete('llego/{id}', 'App\Http\Controllers\DiasCursoClienteController@delete');
+Route::get('roles/{id}', 'App\Http\Controllers\RolesController@show');
+//Route::put('roles/{id}', 'App\Http\Controllers\RolesController@update');
+//Route::post('roles', 'App\Http\Controllers\RolesController@store');
+//Route::delete('roles/{id}', 'App\Http\Controllers\RolesController@delete');
 
-//ForminduccionController CRUD GOL
-Route::get('forminduccion', 'App\Http\Controllers\FormEciController@index');
-Route::get('forminduccion/{id}', 'App\Http\Controllers\FormEciController@show');
-Route::post('forminduccion', 'App\Http\Controllers\FormEciController@store');
-Route::put('forminduccion/{id}', 'App\Http\Controllers\FormEciController@update');
-Route::delete('forminduccion/{id}', 'App\Http\Controllers\FormEciController@delete');
-//ForminduccionController CRUD
-Route::get('form_eci', 'App\Http\Controllers\FormEciController@index');
-Route::get('form_eci/{id}', 'App\Http\Controllers\FormEciController@show');
-Route::post('form_eci', 'App\Http\Controllers\FormEciController@store');
-Route::put('form_eci/{id}', 'App\Http\Controllers\FormEciController@update');
-Route::delete('form_eci/{id}', 'App\Http\Controllers\FormEciController@delete');
-//ForminduccionController CRUD
-Route::get('form_seg', 'App\Http\Controllers\FormSegController@index');
-Route::get('form_seg/{id}', 'App\Http\Controllers\FormSegController@show');
-Route::post('form_seg', 'App\Http\Controllers\FormSegController@store');
-Route::put('form_seg/{id}', 'App\Http\Controllers\FormSegController@update');
-Route::delete('form_seg/{id}', 'App\Http\Controllers\FormSegController@delete');
+Route::group(['middleware' => ['jwt.verify']], function () {
+    //roles auth
+    Route::put('roles/{id}', 'App\Http\Controllers\RolesController@update');
+    Route::post('roles', 'App\Http\Controllers\RolesController@store');
+    Route::delete('roles/{id}', 'App\Http\Controllers\RolesController@delete');
+    //user
+    Route::get('users', 'App\Http\Controllers\UserController@index');
+    Route::get('misEdificios', 'App\Http\Controllers\UserController@misEdificios');
+    Route::get('misDepartamentos', 'App\Http\Controllers\UserController@misDepartamentos');
 
-Route::group(['middleware' => ['jwt.verify']], function() {
-       /*AÑADE AQUI LAS RUTAS QUE QUIERAS PROTEGER CON JWT*/
- });
-//wordpress
-Route::get('orders', 'App\Http\Controllers\WordpressController@orders');
-Route::get('products', 'App\Http\Controllers\WordpressController@products');
-Route::get('contratos', 'App\Http\Controllers\WordpressController@contratos');
+    Route::get('adminMisEdificios', 'App\Http\Controllers\UserController@adminMisEdificios');
 
-Route::get('dash', 'App\Http\Controllers\DashboardController@index');
+    Route::get('users/{id}', 'App\Http\Controllers\UserController@show');
+    Route::put('users/{id}', 'App\Http\Controllers\UserController@update');
+    Route::post('users/{id}', 'App\Http\Controllers\UserController@update');
+    Route::post('users_asignar_masive', 'App\Http\Controllers\UserController@masiveAsignacion');
+    Route::delete('users/{id}', 'App\Http\Controllers\UserController@delete');
+    //Edificios
+    Route::put('edificios/{id}', 'App\Http\Controllers\EdificiosController@update');
+    Route::post('edificios', 'App\Http\Controllers\EdificiosController@store');
+    Route::delete('edificios/{id}', 'App\Http\Controllers\EdificiosController@delete');
+    //Formas de pago
+    Route::put('method_payment/{id}', 'App\Http\Controllers\FormasPagoController@update');
+    Route::post('method_payment/{id}', 'App\Http\Controllers\FormasPagoController@update');
+    Route::post('method_payment', 'App\Http\Controllers\FormasPagoController@store');
+    Route::delete('method_payment/{id}', 'App\Http\Controllers\FormasPagoController@delete');
+    //Propiedades
+    Route::put('propiedades/{id}', 'App\Http\Controllers\PropiedadesController@update');
+    Route::post('propiedades', 'App\Http\Controllers\PropiedadesController@store');
+    Route::delete('propiedades/{id}', 'App\Http\Controllers\PropiedadesController@delete');
+    //Noticias
+    Route::post('noticias/{id}', 'App\Http\Controllers\NoticiasController@update');
+    Route::post('noticias', 'App\Http\Controllers\NoticiasController@store');
+    Route::delete('noticias/{id}', 'App\Http\Controllers\NoticiasController@delete');
+    //Departamentos
+    Route::post('departamentos/{id}', 'App\Http\Controllers\DepartamentosController@update');
+    Route::post('departamentos', 'App\Http\Controllers\DepartamentosController@store');
+    Route::post('departamentos_masive', 'App\Http\Controllers\DepartamentosController@generateMasive');
+    Route::delete('departamentos/{id}', 'App\Http\Controllers\DepartamentosController@delete');
+    Route::delete('departamentos_masive_delete', 'App\Http\Controllers\DepartamentosController@deleteByEdificio');
+    //Ordenes
+    Route::put('ordenes/{id}', 'App\Http\Controllers\OrderController@update');
+    Route::post('ordenes', 'App\Http\Controllers\OrderController@store');
+    Route::delete('ordenes/{id}', 'App\Http\Controllers\OrderController@delete');
+    //Payments
+    Route::put('payment/{id}', 'App\Http\Controllers\PaymentController@update');
+    Route::post('payment', 'App\Http\Controllers\PaymentController@store');
+    Route::delete('payment/{id}', 'App\Http\Controllers\PaymentController@delete');
+    //visitas
+    Route::put('visitas/{id}', 'App\Http\Controllers\VisitasController@update');
+    Route::post('visitas', 'App\Http\Controllers\VisitasController@store');
+    Route::delete('visitas/{id}', 'App\Http\Controllers\VisitasController@delete');
+    //Votaciones
+    Route::put('votaciones/{id}', 'App\Http\Controllers\VotacionesController@update');
+    Route::post('votaciones', 'App\Http\Controllers\VotacionesController@store');
+    Route::delete('votaciones/{id}', 'App\Http\Controllers\VotacionesController@delete');
+    //Voto
+    Route::put('voto/{id}', 'App\Http\Controllers\VotoController@update');
+    Route::post('voto', 'App\Http\Controllers\VotoController@store');
+    Route::delete('voto/{id}', 'App\Http\Controllers\VotoController@delete');
+    //Servicios
+    Route::put('servicios/{id}', 'App\Http\Controllers\ServiciosController@update');
+    Route::post('servicios', 'App\Http\Controllers\ServiciosController@store');
+    Route::delete('servicios/{id}', 'App\Http\Controllers\ServiciosController@delete');
+    //Reservacion
+    Route::put('reservaciones/{id}', 'App\Http\Controllers\ReservationController@update');
+    Route::post('reservaciones', 'App\Http\Controllers\ReservationController@store');
+    Route::delete('reservaciones/{id}', 'App\Http\Controllers\ReservationController@delete');
 
-// use Maatwebsite\Excel\Facades\Excel;
-// Route::post('importar_estudiantes', function(Request $request){
-//        Excel::load($request->file('excel'), function ($reader) {
-//               return response()->json($reader);
-//        });
-// });
-Route::get('lider', 'App\Http\Controllers\ClientesController@lider');
-Route::get('companeros', 'App\Http\Controllers\ClientesController@companeros');
+    //inquilinos
+    Route::get('inquilinos', 'App\Http\Controllers\InquilinosController@index');
+    Route::get('inquilinos/{id}', 'App\Http\Controllers\InquilinosController@show');
+    Route::put('inquilinos/{id}', 'App\Http\Controllers\InquilinosController@update');
+    Route::post('inquilinos', 'App\Http\Controllers\InquilinosController@store');
+    Route::delete('inquilinos/{id}', 'App\Http\Controllers\InquilinosController@delete');
+    //ModulovotacionesVotosController
+    Route::get('modulovotaciones-votos', 'App\Http\Controllers\ModulovotacionesVotosController@index');
+    Route::get('modulovotaciones-votos/{id}', 'App\Http\Controllers\ModulovotacionesVotosController@show');
+    Route::put('modulovotaciones-votos/{id}', 'App\Http\Controllers\ModulovotacionesVotosController@update');
+    Route::post('modulovotaciones-votos/{id}', 'App\Http\Controllers\ModulovotacionesVotosController@update');
+    Route::post('modulovotaciones-votos', 'App\Http\Controllers\ModulovotacionesVotosController@store');
+    Route::delete('modulovotaciones-votos/{id}', 'App\Http\Controllers\ModulovotacionesVotosController@delete');
+    //ModulovotacionesController
+    Route::get('modulovotaciones', 'App\Http\Controllers\ModulovotacionesController@index');
+    Route::get('modulovotaciones/{id}', 'App\Http\Controllers\ModulovotacionesController@show');
+    Route::put('modulovotaciones/{id}', 'App\Http\Controllers\ModulovotacionesController@update');
+    Route::put('modulovotaciones/{id}', 'App\Http\Controllers\ModulovotacionesController@update');
+    Route::post('modulovotaciones', 'App\Http\Controllers\ModulovotacionesController@store');
+    Route::delete('modulovotaciones/{id}', 'App\Http\Controllers\ModulovotacionesController@delete');
 
-Route::post('importar_estudiantes','App\Http\Controllers\ClientesController@import_estudiantes');
-
-Route::get("horario",function(Request $request ){
-    $cursos=[
-        'SIC',
-        'GOL',
-        'ECI',
-    ];
-    $curso_input=$request->input('curso') ?? null;
-    if($curso_input){
-        $curso_input=strtoupper($curso_input);
-    }
-    if($curso_input && in_array($curso_input,$cursos)){
-        $sic=[
-            [
-                "id"=> 1,
-                "title"=> 'Inscripción y entrenamiento',
-                "day"=> 'Miércoles',
-                "start"=> '6:00 pm',
-                "end"=> '10:30 pm',
-                "startInscripcion"=> '5:00 pm',
-                "endInscripcion"=> '6:00 pm',
-            ],
-            [
-                "id"=> 2,
-                "title"=> 'Entrenamiento',
-                "day"=> 'Jueves',
-                "start"=> '6:00 pm',
-                "end"=> '10:30 pm',
-            ],
-            [
-                "id"=> 3,
-                "title"=> 'Entrenamiento',
-                "day"=> 'Viernes',
-                "start"=> '6:00 pm',
-                "end"=> '10:30 pm',
-            ],
-            [
-                "id"=> 4,
-                "title"=> 'Entrenamiento',
-                "day"=> 'Sábado',
-                "start"=> '10:00 am',
-                "end"=> '9:30 pm',
-            ],
-            [
-                "id"=> 5,
-                "title"=> 'Entrenamiento',
-                "day"=> 'Domingo',
-                "start"=> '10:00 am',
-                "end"=> '7:00 pm',
-            ]
-        ];
-        $ECI=[
-            [
-                "id"=> 6,
-                "title"=> 'Inscripción y entrenamiento',
-                "day"=> 'Miercoles',
-                "start"=> '10:30 am',
-                "end"=> '11:45 pm',
-                "startInscripcion"=> '12:00 pm',
-                "endInscripcion"=> '11:00 pm',
-            ],
-            [
-                "id"=> 7,
-                "title"=> 'Entrenamiento',
-                "day"=> 'Jueves',
-                "start"=> '12:00 pm',
-                "end"=> '11:00 pm',
-            ],
-            [
-                "id"=> 8,
-                "title"=> 'Entrenamiento',
-                "day"=> 'Viernes',
-                "start"=> '12:00 pm',
-                "end"=> '11:00 pm',
-            ],
-            [
-                "id"=> 9,
-                "title"=> 'Entrenamiento',
-                "day"=> 'Sabado',
-                "start"=> '10:00 am',
-                "end"=> '10:00 pm',
-            ],
-            [
-                "id"=> 10,
-                "title"=> 'Entrenamiento',
-                "day"=> 'Domingo',
-                "start"=> '10:00 am',
-                "end"=> '7:00 pm',
-            ],
-        ];
-        $GOL=[
-            [
-                "titulo"=>"Primer fin de semana",
-                "data"=>[
-                    [
-                        "id"=> 11,
-                        "title"=> 'Entrenamiento',
-                        "day"=> 'Viernes',
-                        "start"=> '7:00 pm',
-                        "end"=> 'Depende 100% del compromiso del grupo'
-                    ],
-                    [
-                        "id"=> 12,
-                        "title"=> 'Entrenamiento',
-                        "day"=> 'Sábado',
-                        "start"=> '10:00 am',
-                        "end"=> 'Depende 100% del compromiso del grupo'
-                    ],
-                    [
-                        "id"=> 13,
-                        "title"=> 'Entrenamiento',
-                        "day"=> 'Domingo',
-                        "start"=> '11:00 am',
-                        "end"=> 'Depende 100% del compromiso del grupo'
-                    ],
-                ]
-            ],
-            [
-                "titulo"=>"Segundo fin de semana",
-                "data"=>[
-                    [
-                        "id"=> 14,
-                        "title"=> 'Entrenamiento',
-                        "day"=> 'Viernes',
-                        "start"=> '5:30 pm',
-                        "end"=> 'Depende 100% del compromiso del grupo'
-                    ],
-                    [
-                        "id"=> 16,
-                        "title"=> 'Entrenamiento',
-                        "day"=> 'Sábado',
-                        "start"=> '8:00 am',
-                        "end"=> 'Depende 100% del compromiso del grupo'
-                    ],
-                    [
-                        "id"=> 13,
-                        "title"=> 'Entrenamiento',
-                        "day"=> 'Domingo',
-                        "start"=> '10:00 am',
-                        "end"=> 'Depende 100% del compromiso del grupo'
-                    ],
-                ]
-            ],
-            [
-                "titulo"=>"Tercer fin de semana",
-                "data"=>[
-                    [
-                        "id"=> 14,
-                        "title"=> 'Entrenamiento',
-                        "day"=> 'Viernes',
-                        "start"=> '5:30 pm',
-                        "end"=> 'Depende 100% del compromiso del grupo'
-                    ],
-                    [
-                        "id"=> 16,
-                        "title"=> 'Entrenamiento',
-                        "day"=> 'Sábado',
-                        "start"=> '8:00 am',
-                        "end"=> 'Depende 100% del compromiso del grupo'
-                    ],
-                    [
-                        "id"=> 13,
-                        "title"=> 'Outdoors',
-                        "day"=> 'Viernes - Domingo',
-                        "start"=> 'Partida Viernes 7:30 pm',
-                        "end"=> 'Regreso domingo 7:00 pm'
-                    ],
-                ]
-            ],
-        ];
-
-        $data=[];
-        switch ($curso_input) {
-            case 'SIC':
-                $data=$sic;
-                break;
-            case 'ECI':
-                $data=$ECI;
-                break;
-            case 'GOL':
-                $data=$GOL;
-                break;
-            default:
-                $data=$sic;
-                break;
-        }
-        return response()->json([
-            'data'=>$data
-        ],200);
-    }else{
-        return response()->json([
-            'message'=>'Curso no encontrado'
-        ],404);
-    }
 });
 
+//Edificios
+Route::get('edificios', 'App\Http\Controllers\EdificiosController@index');
+Route::get('edificios/{id}', 'App\Http\Controllers\EdificiosController@show');
 
-Route::get("reglas",function(Request $request ){
-    $cursos=[
-        'SIC',
-        'GOL',
-        'ECI',
-    ];
-    $curso_input=$request->input('curso') ?? null;
-    if($curso_input){
-        $curso_input=strtoupper($curso_input);
-    }
-    if($curso_input && in_array($curso_input,$cursos)){
-        $ECI=[
-             [
-                "id"=> 1,
-                "number"=> 1,
-                "description"=>
-                'Mantenga absoluta confidencialidad de las vivencias y experiencias de los demás participantes. Jamás hable, comente o divulgue ningún tipo de información acerca del contenido de la Experiencia de Coaching Interpersona.',
-            ],
-            [
-                "id"=> 2,
-                "number"=> 2,
-                "description"=>
-                ' Sea puntual. El entrenamiento comienza a las doce del mediodía el miércoles, el jueves, y el viernes, a las diez de la mañana el sábado, y el domingo.',
-            ],
-            [
-                "id"=> 3,
-                "number"=> 3,
-                "description"=>
-                'No hable con las personas sentadas a su alrededor. Ni fume, coma, beba o mastique chicle dentro del salón de entrenamiento.',
-            ],
-            [
-                "id"=> 4,
-                "number"=> 4,
-                "description"=>
-                'Sea responsable por su bienestar físico. Aliméntese en forma adecuada y duerma lo suficiente. Por sobre todo, no olvide tomar los medicamentos recetados por su médico en la forma y horarios prescritos por el mismo.',
-            ],
-            [
-                "id"=> 5,
-                "number"=> 5,
-                "description"=>
-                ' No fume marihuana, ni consuma ningún tipo de bebida alcohólica o droga no recetada por su médico durante los cinco días.',
-            ],
-            [
-                "id"=> 6,
-                "number"=> 6,
-                "description"=>
-                'Lleve su nombre en un lugar visible durante todo el entrenamiento. Entregue su nametag antes de retirarse para el recreo de las comidas y antes de irse todas las noches.',
-            ],
-            [
-                "id"=> 7,
-                "number"=> 7,
-                "description"=>
-                'No use ningún tipo de grabador durante el entrenamiento. Sólo tome notas dentro del salón cuándo le sea indicado por el coach. Teléfonos celulares y dispositivos electrónicos similares deberán permanecer apagados durante todo el entrenamiento.',
-            ],
-            [
-                "id"=> 8,
-                "number"=> 8,
-                "description"=>
-                'No se siente al lado de personas conocidas desde antes de comenzar el SIC.',
-            ],
-            [
-                "id"=> 9,
-                "number"=> 9,
-                "description"=>
-                'No comience ningún tipo de relación sexual nueva con ningún participante por un período mínimo de 30 (treinta) días después de completar el entrenamiento.',
-            ],
-            [
-                "id"=> 10,
-                "number"=> 10,
-                "description"=>
-                'No realice ningún tipo de violencia física, hacia usted mismo, ni contra ninguna otra persona, tampoco hacia elementos de propiedad.',
-            ],
-        ];
-        $SIC=[
-            [
-                "id"=> 11,
-                "number"=> 1,
-                "description"=>
-                "Respeta la confidencialidad acerca de las vivencias y experiencias de los demás participantes.",
-            ],
-            [
-                "id"=> 12,
-                "number"=> 2,
-                "description"=>
-                "No hable con las personas sentadas a su alrededor. Haga preguntas, converse y comparta con los demás participantes únicamente cuando les sea permitido por el coach durante los períodos designados para tales actividades."
-            ],
-            [
-                "id"=> 13,
-                "number"=> 3,
-                "description"=>
-                "Participe en todas las sesiones del seminario. El seminario completo comprende los cinco días."
-            ],
-            [
-                "id"=> 14,
-                "number"=> 4,
-                "description"=>
-                "Sea puntual. Esté sentado antes de que termine la música. Momentos antes del comienzo de cada sesión e inmediatamente después de cada descanso, usted escuchará una pieza musical de aproximadamente un minuto y medio de duración. El seminario comienza a las seis de la tarde el miércoles, jueves y viernes, diez de la mañana el sábado y diez de la mañana el domingo."
-            ],
-            [
-                "id"=> 15,
-                "number"=> 5,
-                "description"=>
-                "No fume, coma, beba o masitque chicle dentro del salón donde se dicta el seminario."
-            ],
-            [
-                "id"=> 16,
-                "number"=> 6,
-                "description"=>
-                "No fume marihuana, ni consuma ningún tipo de bebida alcohólica o droga no recetada por su médico durante los cinco días."
-            ],
-            [
-                "id"=> 17,
-                "number"=> 7,
-                "description"=>
-                "Sea responsable por su bienestar físico. Aliméntese adecuadamente, duerma y descanse lo suficiente, y recuerde tomar sus medicamentos recetados en los horarios recomendados por su médico."
-            ],
-            [
-                "id"=> 18,
-                "number"=> 8,
-                "description"=>
-                "Lleve su nombre en un lugar visible durante todo el seminario. Devuélvalo al final de cada día y antes de las comidas."
-            ],
-            [
-                "id"=> 19,
-                "number"=> 9,
-                "description"=>
-                "No use ningún tipo de grabador ni tomen notas dentro del salón, durante todo el seminario. Teléfonos celulares y dispositivos electrónicos similares deberán permanecer apagados durante todo el seminario."
-            ],
-            [
-                "id"=> 20,
-                "number"=> 10,
-                "description"=>
-                "No se siente al lado de personas conocidas desde antes de comenzar el seminario."
-            ],
-        ];
-        $GOL=[
-           [
-                "id"=> 21,
-                "number"=> 1,
-                "description"=>
-                "Mantenga absoluta confidencialidad de las vivencias y experiencias de los demás participantes. Jamás hable, comente o divulgue ningún tipo de información acerca del contenido del entrenamiento."
-            ],
-            [
-                "id"=> 22,
-                "number"=> 2,
-                "description"=>
-                "Sea puntual."
-            ],
-            [
-                "id"=> 23,
-                "number"=> 3,
-                "description"=>
-                "No hable con las personas sentadas a su alrededor. Ni fume, coma, beba o masque chicle dentro del salón de entrenamiento."
-            ],
-            [
-                "id"=> 24,
-                "number"=> 4,
-                "description"=>
-                "Sea responsable por su bienestar físico. Aliméntese de forma adecuada y duerma lo suficiente. Por sobre todo, no olvide tomar los medicamentos recetados por su médico en la forma y horarios prescritos por el mismo."
-            ],
-            [
-                "id"=> 25,
-                "number"=> 5,
-                "description"=>
-                "No fume marihuana, ni consuma ningún tipo de bebida alcohólica o droga no recetada por su médico durante los fines de semana y reuniones de entrenamiento."
-            ],
-            [
-                "id"=> 26,
-                "number"=> 6,
-                "description"=>
-                "Sea responsable por su meta. Lleve su nombre en un lugar visible durante las sesiones de entrenamiento. Devuélvalo al finalizar su participación en GOL."
-            ],
-            [
-                "id"=> 27,
-                "number"=> 7,
-                "description"=>
-                "No use ningún tipo de grabador durante el curso. Sólo tomen notas dentro del salón cuando les sea indicado por el coach."
-            ],
-            [
-                "id"=> 28,
-                "number"=> 8,
-                "description"=>
-                "Teléfonos celulares y dispositivos electrónicos similares deberán permanecer apagados durante las sesiones de entrenamiento."
-            ],
-            [
-                "id"=> 29,
-                "number"=> 9,
-                "description"=>
-                "No realice ningún tipo de violencia física, hacia usted mismo, ni contra ninguna otra persona, tampoco hacia elementos de propiedad."
-            ],
-            [
-                "id"=> 30,
-                "number"=> 10,
-                "description"=>
-                "No inicien ningún tipo de relación sexual nueva con ningún participante por un período mínimo de 30 (treinta) días después de completar GOL."
-            ],
-        ];
+//Formas de pago
+Route::get('method_payment', 'App\Http\Controllers\FormasPagoController@index');
+Route::get('method_payment/{id}', 'App\Http\Controllers\FormasPagoController@show');
 
-        $data=[];
-        switch ($curso_input) {
-            case 'SIC':
-                $data=$SIC;
-                break;
-            case 'ECI':
-                $data=$ECI;
-                break;
-            case 'GOL':
-                $data=$GOL;
-                break;
-            default:
-                $data=$sic;
-                break;
-        }
-        return response()->json([
-            'data'=>$data
-        ],200);
-    }else{
-        return response()->json([
-            'message'=>'Curso no encontrado'
-        ],404);
-    }
-});
+//Propiedades
+Route::get('propiedades', 'App\Http\Controllers\PropiedadesController@index');
+Route::get('propiedades/{id}', 'App\Http\Controllers\PropiedadesController@show');
+
+//Noticias
+Route::get('noticias', 'App\Http\Controllers\NoticiasController@index');
+Route::get('noticias/{id}', 'App\Http\Controllers\NoticiasController@show');
+
+//Departamentos
+Route::get('departamentos', 'App\Http\Controllers\DepartamentosController@index');
+Route::get('departamentos/{id}', 'App\Http\Controllers\DepartamentosController@show');
+
+//Ordenes
+Route::get('ordenes', 'App\Http\Controllers\OrderController@index');
+Route::get('ordenes/{id}', 'App\Http\Controllers\OrderController@show');
+
+//payment
+Route::get('payment', 'App\Http\Controllers\PaymentController@index');
+Route::get('payment/{id}', 'App\Http\Controllers\PaymentController@show');
+
+//visitas
+Route::get('visitas', 'App\Http\Controllers\VisitasController@index');
+Route::get('visitas/{id}', 'App\Http\Controllers\VisitasController@show');
+
+
+//Votaciones
+Route::get('votaciones', 'App\Http\Controllers\VotacionesController@index');
+Route::get('votaciones/{id}', 'App\Http\Controllers\VotacionesController@show');
+
+
+//Voto
+Route::get('voto', 'App\Http\Controllers\VotoController@index');
+Route::get('voto/{id}', 'App\Http\Controllers\VotoController@show');
+
+//Servicios
+Route::get('servicios', 'App\Http\Controllers\ServiciosController@index');
+Route::get('servicios/{id}', 'App\Http\Controllers\ServiciosController@show');
+
+//Reservacion
+Route::get('reservaciones', 'App\Http\Controllers\ReservationController@index');
+Route::get('reservaciones/{id}', 'App\Http\Controllers\ReservationController@show');
