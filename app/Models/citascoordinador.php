@@ -11,11 +11,7 @@ class citascoordinador extends Model
     protected $fillable = [
         'participante_id',
         'coordinador_id',
-        'fecha',
-        'init_hora',
-        'end_hora',
-        'tipo',
-        'estado', 
+        'horario_id',
     ];
     public function participante()
     {
@@ -24,6 +20,9 @@ class citascoordinador extends Model
     public function coordinador()
     {
         return $this->belongsTo(User::class, 'coordinador_id');
+    }
+    public function horario(){
+        return $this->belongsTo(horariocoordinador::class, 'horario_id');
     }
     
 }

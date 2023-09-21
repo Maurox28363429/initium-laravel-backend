@@ -150,6 +150,12 @@ class ClientesController extends Controller
             "pais",
             "user_id"
         ])->orderBy('name', 'asc');
+        $all=$request->input('all') ?? null;
+        if($all){
+            return [
+                "data"=>$query->get()
+            ];
+        }
         $datos = $query->paginate(15);
         return [
             "data" => $datos->items(),

@@ -10,11 +10,13 @@ class CitascoordinadorController extends Controller
 {
     use HelpersTrait;
     public function index(Request $request){
-        $query=Models::query();
+        $includes=$request->input('includes') ?? [];
+        $query=Models::query()->with($includes);
         $page=$request->input('page') ?? null;
         $participante_id = $request->input('participante_id') ?? null;
         $coordinador_id = $request->input('coordinador_id') ?? null;
-        $fecha = $request->input('fecha') ?? null;
+        $init_date = $request->input('init_date') ?? null;
+        $end_date = $request->input('end_date') ?? null;
         $estado = $request->input('estado') ?? null;
         if($participante_id){
             $query->where('participante_id',$participante_id);
@@ -22,8 +24,17 @@ class CitascoordinadorController extends Controller
         if($coordinador_id){
             $query->where('coordinador_id',$coordinador_id);
         }
-        if($fecha){
-            $query->where('fecha',$fecha);
+        if($init_date){
+            $query->with(['horario']);
+            $query->whereHas('horario',function($q) use ($init_date){
+                $q->where('fecha','>=',$init_date);
+            });
+        }
+        if($end_date){
+            $query->with(['horario']);
+            $query->whereHas('horario',function($q) use ($end_date){
+                $q->where('fecha','<=',$end_date);
+            });
         }
         if($estado){
             $query->where('estado',$estado);

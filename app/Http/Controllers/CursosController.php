@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\{
-    Cursos as Models
+    Cursos as Models,
+    User
 };
 use App\Http\Traits\HelpersTrait;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CursosController extends Controller
 {
@@ -41,11 +44,26 @@ class CursosController extends Controller
     }
     public function show($id, Request $request)
     {
-        $includes = $request->input('includes') ?? [];
-        return $this->HelpShow(
-            Models::where("id", $id)->limit(1)->with($includes),
-            $request->all()
-        );
+        try {
+            DB::beginTransaction();
+            $data= $request->all();
+            $includes = $request->input('includes') ?? [];
+            $includes = $data["includes"] ?? [];
+            $process=Models::where("id", $id)->limit(1)->with($includes)->first();
+            if (!$process) {
+                throw new \Exception("No encontrado", 404);
+            }
+            DB::commit();
+            return [
+                "message" => "Busqueda",
+                "status" => 200,
+                "data" => $process,
+                "coordinador"=>User::query()->where('curso_id',$process->id)->get()
+            ];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->HelpError($e);
+        }
     }
     public function store(Request $request)
     {
