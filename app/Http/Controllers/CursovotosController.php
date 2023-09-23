@@ -66,15 +66,19 @@ class CursovotosController extends Controller
             $resultados[$voto->seleccion_3] += 1;
         }
         foreach ($resultados as $key => $value) {
-            $resultados[$key] = [
-                'user' => User::where('id', $key)->select([
+            $user=User::where('id', $key)->select([
                     "id",
                     "name",
                     "email",
                     "img"
-                ])->first(),
-                'votos' => $value
-            ];
+                ])->first();
+                $resultados[$key] = [
+                    'user' => $user,
+                    'votos' => $value
+                ];
+                if(!$user){
+                    unset($resultados[$key]);
+                }
         }
         return $resultados;
     }
